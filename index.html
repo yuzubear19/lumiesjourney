@@ -297,6 +297,48 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 .vcategory{font-family:var(--fb);font-size:11px;color:var(--text-s);}
 .prev-btn{font-family:var(--fb);font-size:11px;padding:4px 10px;border-radius:8px;
   border:1.5px solid #ddd;background:transparent;color:var(--green);cursor:pointer;font-weight:700;}
+
+/* Map node images */
+.map-node-img{width:132px;height:132px;object-fit:cover;border-radius:50%;}
+.map-node-img--locked{opacity:0.4;filter:grayscale(0.85);}
+
+/* ══ MOBILE ══ */
+@media (max-width: 480px) {
+  /* Top bar */
+  .icon-btn{font-size:13px;padding:4px 8px;}
+  .star-pill{font-size:13px;padding:4px 8px;}
+  .back-btn{font-size:12px;padding:4px 9px;}
+  .top-bar{padding:8px 10px;}
+
+  /* Map */
+  .map-topbar-lumie{width:100px;height:100px;}
+  #map-screen .top-bar .top-left{padding-left:160px;}
+  .map-node-circle{width:90px;height:90px;}
+  .map-node-label{font-size:11px;}
+  .top-title{font-size:15px;}
+  #map-screen .top-left .top-title{font-size:26px;}
+
+  /* Map node images */
+  .map-node-img{width:82px;height:82px;}
+
+  /* Room */
+  .room-stage{width:220px;height:220px;}
+  .room-lumie-img{width:210px;height:210px;}
+  .room-eyewear-img{width:210px;height:210px;}
+  .room-content{padding-top:14%;}
+  .room-items{max-width:200px;font-size:11px;}
+  .room-item-chip{font-size:11px;padding:4px 8px;}
+
+  /* Shop tabs */
+  .shop-tabs{flex-wrap:wrap;padding:8px 8px 0;}
+  .shop-tab{font-size:11px;padding:5px 10px;}
+
+  /* Shop layout — stack preview above grid */
+  .shop-body{flex-direction:column;align-items:center;}
+  .shop-preview-container{width:140px;height:210px;}
+  .shop-grid{width:100%;max-width:340px;grid-template-columns:1fr 1fr;}
+  .shop-outfit-img{width:80px;height:80px;}
+}
 </style>
 </head>
 <body>
@@ -811,8 +853,8 @@ function renderMap() {
     circle.style.overflow = 'hidden';
     circle.style.padding = area.img ? '0' : '';
     circle.innerHTML = aState==='locked'
-      ? (area.img ? `<img src="${area.img}" style="width:124px;height:124px;object-fit:cover;border-radius:50%;opacity:0.4;filter:grayscale(0.85);">` : '<span style="font-size:22px;">🔒</span>')
-      : (area.img ? `<img src="${area.img}" style="width:132px;height:132px;object-fit:cover;border-radius:50%;">` : `<span style="font-size:26px;">${area.emoji}</span>`);  const label = document.createElement('div');
+      ? (area.img ? `<img src="${area.img}" class="map-node-img map-node-img--locked">` : '<span style="font-size:22px;">🔒</span>')
+      : (area.img ? `<img src="${area.img}" class="map-node-img">` : `<span style="font-size:26px;">${area.emoji}</span>`);  const label = document.createElement('div');
     label.className = 'map-node-label';
     label.textContent = area.name;
     node.appendChild(circle); node.appendChild(label);
