@@ -12,7 +12,7 @@
   --peach:#FFF0DC;--cream:#FDF8F0;
   --gold:#F5C06A;--text:#3D2B1F;--text-m:#6B4C3B;--text-s:#9B7B6B;
   --r:16px;--rs:10px;
-  --fh:'Poppins',sans-serif;--fb:'Poppins',sans-serif;
+  --fh:'Baloo 2',cursive;--fb:'Poppins',sans-serif;
 }
 html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 .screen{position:fixed;inset:0;display:none;flex-direction:column;overflow:hidden;}
@@ -26,19 +26,19 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 .top-left{display:flex;align-items:center;gap:8px;}
 #map-screen .top-bar .top-left{padding-left:260px;}
 .top-right{display:flex;align-items:center;gap:8px;}
-.top-title{font-family:var(--fh);font-size:20px;color:var(--text);}#user-pill,#voice-btn,#shop-nav-btn{font-family:'Baloo 2',cursive;}
+.top-title{font-family:var(--fh);font-size:20px;color:var(--text);}#user-pill,#voice-btn,#shop-nav-btn{font-family:var(--fh);}
 .back-btn{font-family:var(--fb);font-size:14px;font-weight:700;color:var(--green);
   background:var(--green-p);border:1.5px solid var(--green-l);
   border-radius:20px;padding:5px 12px;cursor:pointer;}
 .back-btn:hover{background:#d0edcc;}
-.icon-btn{font-family:var(--fb);font-size:13px;font-weight:700;
+.icon-btn{font-family:var(--fb);font-size:16px;font-weight:700;
   background:var(--green-p);border:1.5px solid var(--green-l);
   border-radius:20px;padding:5px 11px;color:var(--green);cursor:pointer;}
 .icon-btn:hover{background:#d0edcc;}
 .icon-btn.connected{background:#d0edcc;color:#1a5a18;}
 .star-pill{background:#FFF8DC;border:1.5px solid #F5C06A;border-radius:20px;
   padding:5px 12px;font-family:var(--fh);font-size:16px;color:#B8860B;}
-.map-topbar-lumie{width:250px;height:250px;object-fit:contain;cursor:pointer;
+.map-topbar-lumie{width:150px;height:150px;object-fit:contain;cursor:pointer;
   border-radius:0;border:none;background:transparent;
   padding:0;transition:transform 0.15s;
   position:absolute;top:0;left:0;z-index:20;
@@ -96,7 +96,7 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 
 .map-node{position:absolute;transform:translate(-50%,-50%);cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:5px;z-index:5;}
-.map-node-circle{width:116px;height:116px;border-radius:50%;
+.map-node-circle{width:140px;height:140px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:28px;
   border:4px solid rgba(255,255,255,0.7);
   box-shadow:0 4px 18px rgba(0,0,0,0.2);
@@ -190,19 +190,22 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 #room-screen{position:relative;background:transparent;}
 .room-bg-svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
 .room-content{flex:1;display:flex;flex-direction:column;align-items:center;
-  justify-content:flex-start;padding-top:18%;position:relative;z-index:1;overflow:hidden;padding-bottom:16px;gap:8px;}
+  justify-content:flex-start;padding-top:18%;position:relative;z-index:1;overflow:visible;padding-bottom:16px;gap:8px;}
 .room-stage{width:310px;height:310px;position:relative;
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;}
 .room-lumie-img{width:300px;height:300px;object-fit:contain;object-position:bottom;
   filter:drop-shadow(0 8px 20px rgba(0,0,0,0.14));}
+.room-eyewear-img{position:absolute;inset:0;margin:auto;width:300px;height:300px;object-fit:contain;object-position:bottom;pointer-events:none;display:none;}
 .room-outfit-label{font-family:var(--fh);font-size:14px;color:var(--text-m);
   background:rgba(255,255,255,0.8);border-radius:12px;padding:3px 12px;}
-.room-items{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
-  padding:6px 16px;max-width:400px;overflow-y:auto;max-height:120px;}
-.room-item-chip{background:rgba(255,255,255,0.85);border-radius:12px;padding:5px 12px;
-  font-family:var(--fb);font-size:13px;border:1.5px solid #e0d0c0;
-  display:flex;align-items:center;gap:5px;cursor:pointer;transition:all 0.15s;}
+.room-items{position:absolute;left:12px;top:50%;transform:translateY(-40%);
+  z-index:2;display:grid;grid-template-columns:auto auto;gap:6px;
+  max-width:260px;max-height:55vh;overflow-y:auto;padding:4px 2px;}
+.room-item-chip{background:rgba(255,255,255,0.88);border-radius:12px;padding:5px 10px;
+  font-family:var(--fh);font-size:13px;border:1.5px solid #e0d0c0;
+  display:flex;align-items:center;gap:5px;cursor:pointer;transition:all 0.15s;
+  white-space:nowrap;}
 .room-item-chip.active{border-color:var(--green-l);background:#e8f8e4;}
 .room-item-chip:hover{transform:scale(1.04);}
 .room-empty{font-family:var(--fb);font-size:14px;color:var(--text-s);
@@ -217,16 +220,20 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 
 /* ══ SHOP ══ */
 #shop-screen{background:var(--cream);}
-.shop-header{display:flex;align-items:center;justify-content:center;gap:12px;
-  padding:12px;background:#fff;border-bottom:1.5px solid #eee;flex-shrink:0;cursor:pointer;}
-.shop-header-lumie{width:52px;height:52px;object-fit:contain;}
-.shop-header-text{font-family:var(--fh);font-size:18px;color:var(--text);}
-.shop-tabs{display:flex;padding:10px 12px 0;gap:8px;flex-shrink:0;}
+.shop-tabs{display:flex;padding:10px 12px 0;gap:8px;flex-shrink:0;justify-content:center;}
 .shop-tab{font-family:var(--fh);font-size:13px;padding:7px 15px;border-radius:20px;
   border:2px solid #ddd;background:#fff;color:var(--text-m);cursor:pointer;transition:all 0.15s;}
 .shop-tab.active{background:var(--green-l);color:#fff;border-color:var(--green-l);}
 .shop-scroll{flex:1;overflow-y:auto;padding:12px 12px 24px;}
-.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:460px;margin:0 auto;}
+.shop-body{display:flex;align-items:flex-start;justify-content:center;gap:20px;flex-wrap:wrap;}
+.shop-preview-panel{display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;flex-shrink:0;}
+.shop-preview-panel:hover .shop-preview-container{transform:scale(1.02);}
+.shop-preview-container{position:relative;width:200px;height:310px;
+  transition:transform 0.15s;}
+.shop-preview-container img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;}
+.shop-preview-label{font-family:var(--fb);font-size:11px;color:var(--text-s);text-align:center;}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:300px;}
 .shop-card{background:#fff;border-radius:var(--r);border:2px solid #eee;
   padding:14px 10px 12px;display:flex;flex-direction:column;align-items:center;gap:5px;
   transition:transform 0.15s,box-shadow 0.15s;}
@@ -236,8 +243,8 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 .shop-outfit-img{width:120px;height:120px;object-fit:contain;}
 .shop-emoji{font-size:36px;}
 .shop-name{font-family:var(--fh);font-size:15px;color:var(--text);text-align:center;}
-.shop-desc-cost{font-family:var(--fh);font-size:14px;color:#B8860B;}
-.shop-btn{font-family:var(--fh);font-size:13px;border:none;border-radius:16px;
+.shop-desc-cost{font-family:var(--fb);font-size:14px;color:#B8860B;}
+.shop-btn{font-family:var(--fb);font-size:13px;border:none;border-radius:16px;
   padding:6px 16px;cursor:pointer;transition:opacity 0.15s;}
 .shop-btn.buy{background:var(--green-l);color:#fff;}
 .shop-btn.buy:hover{background:var(--green);}
@@ -246,6 +253,25 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 .shop-btn.toggle-on{background:var(--green-l);color:#fff;}
 .shop-btn.toggle-off{background:var(--green-p);color:var(--green);border:1.5px solid var(--green-l);}
 .shop-btn.cant{background:#eee;color:#aaa;cursor:not-allowed;}
+
+/* ══ ADMIN ══ */
+#admin-btn{position:fixed;bottom:10px;right:10px;font-size:11px;color:#ccc;background:none;border:none;cursor:pointer;z-index:999;opacity:0.4;}
+#admin-btn:hover{opacity:1;}
+#admin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;}
+#admin-modal.open{display:flex;}
+.admin-box{background:#fff;border-radius:16px;padding:28px 24px;width:280px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
+.admin-box h3{font-family:var(--fh);font-size:17px;color:var(--text);margin:0 0 6px;}
+.admin-box p{font-size:13px;color:#888;margin:0 0 16px;}
+.admin-box input{width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid #ddd;border-radius:10px;font-size:15px;margin-bottom:12px;text-align:center;letter-spacing:2px;}
+.admin-box input:focus{outline:none;border-color:var(--green-l);}
+.admin-row{display:flex;gap:8px;}
+.admin-row button{flex:1;padding:10px;border:none;border-radius:10px;font-family:var(--fh);font-size:14px;cursor:pointer;}
+.admin-row .admin-ok{background:var(--green-l);color:#fff;}
+.admin-row .admin-cancel{background:#eee;color:#888;}
+.admin-active-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:#F5C06A;color:#7a5000;font-family:var(--fh);font-size:12px;text-align:center;padding:5px 12px;z-index:998;align-items:center;justify-content:center;gap:12px;}
+.admin-active-bar.show{display:flex;}
+.admin-exit-btn{font-family:var(--fh);font-size:12px;background:#fff;color:#7a5000;border:1.5px solid #c8960a;border-radius:10px;padding:2px 10px;cursor:pointer;}
+.admin-exit-btn:hover{background:#ffeeba;}
 
 /* ══ VOICE ══ */
 #api-screen{background:var(--cream);}
@@ -294,12 +320,12 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
   <div class="top-bar">
     <div class="top-left">
       <img class="map-topbar-lumie" src="./img/lumie-main.png" alt="Lumie" onclick="showScreen('room-screen')" title="Lumie's Room"/>
-      <span class="top-title" style="font-size:38px;font-weight:800;line-height:1.1;font-family:'Baloo 2',cursive;">Lumie's Journey</span>
+      <span class="top-title" style="font-size:38px;font-weight:800;line-height:1.1;">Lumie's Journey</span>
     </div>
     <div class="top-right">
       <button class="icon-btn" onclick="switchUser()">👋 <span id="user-pill">...</span></button>
-      <button class="icon-btn" id="shop-nav-btn" onclick="showScreen('shop-screen')">🛍 Shop</button>
       <button class="icon-btn" id="voice-btn" onclick="showScreen('api-screen')">🎙 Voice</button>
+      <button class="icon-btn" id="shop-nav-btn" onclick="showScreen('shop-screen')">🛍 Shop</button>
       <div class="star-pill">⭐ <span class="star-display">0</span></div>
     </div>
   </div>
@@ -429,8 +455,10 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
       <button class="back-btn" onclick="showScreen('map-screen')">← Map</button>
       <span class="top-title">Lumie's Room</span>
     </div>
-    <button class="icon-btn" id="shop-nav-btn" onclick="showScreen('shop-screen')">🛍 Shop</button>
-    <div class="star-pill" style="margin-left:8px;">⭐ <span class="star-display">0</span></div>
+    <div class="top-right">
+      <button class="icon-btn" id="shop-nav-btn" onclick="showScreen('shop-screen')">🛍 Shop</button>
+      <div class="star-pill">⭐ <span class="star-display">0</span></div>
+    </div>
   </div>
   <svg class="room-bg-svg" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
     <rect width="800" height="520" fill="#FEF0E4"/>
@@ -577,12 +605,13 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
     <ellipse cx="560" cy="390" rx="85" ry="28" fill="#FFF8F0" opacity="0.32"/>
   </svg>
   <div class="room-empty" id="room-empty">Visit the shop to get items for Lumie!</div>
+  <div class="room-items" id="room-items"></div>
   <div class="room-content">
     <div class="room-stage" id="room-stage">
       <img class="room-lumie-img" id="room-lumie-img" src="./img/lumie-main.png" alt="Lumie"/>
+      <img class="room-eyewear-img" id="room-eyewear-img" src="" alt=""/>
     </div>
     <div class="room-outfit-label" id="outfit-label"></div>
-    <div class="room-items" id="room-items"></div>
   </div>
 </div>
 
@@ -595,19 +624,24 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
     </div>
     <div class="star-pill">⭐ <span class="star-display">0</span></div>
   </div>
-  <div class="shop-header" onclick="showScreen('room-screen')" title="Visit Lumie's Room">
-    <img class="shop-header-lumie" src="./img/lumie-hugs.png" alt="Lumie"/>
-    <div>
-      <div class="shop-header-text">Lumie's Shop</div>
-      <div style="font-family:var(--fb);font-size:11px;color:var(--text-s);">Tap Lumie to visit her room →</div>
-    </div>
-  </div>
   <div class="shop-tabs">
     <button class="shop-tab active" onclick="switchTab('outfits',this)">👗 Outfits</button>
     <button class="shop-tab" onclick="switchTab('companions',this)">🐾 Companions</button>
     <button class="shop-tab" onclick="switchTab('toys',this)">🎁 Toys</button>
+    <button class="shop-tab" onclick="switchTab('eyewear',this)">👓 Eyewear</button>
   </div>
-  <div class="shop-scroll"><div class="shop-grid" id="shop-grid"></div></div>
+  <div class="shop-scroll">
+    <div class="shop-body">
+      <div class="shop-preview-panel" onclick="showScreen('room-screen')" title="Visit Lumie's Room">
+        <div class="shop-preview-container">
+          <img id="shop-preview-outfit" src="./img/lumie-main.png" alt="Lumie"/>
+          <img id="shop-preview-eyewear" src="" alt="" style="display:none;"/>
+        </div>
+        <div class="shop-preview-label">Tap Lumie to visit her room</div>
+      </div>
+      <div class="shop-grid" id="shop-grid"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ══ VOICE ══ -->
@@ -644,11 +678,18 @@ const OUTFIT_IMGS = {
   lumiekimono:        './img/lumie-kimono.png',
   lumieeveningdress:  './img/lumie-eveningdress.png',
   lumiesports:        './img/lumie-sports.png',
+  lumiehawaii:        './img/lumie-hawaii.png',
+};
+const EYEWEAR_IMGS = {
+  ew_pink:       './img/eyewear-pink.png',
+  ew_black:      './img/eyewear-black.png',
+  ew_red:        './img/eyewear-red.png',
+  ew_masquerade: './img/eyewear-masquerade.png',
 };
 
 const AREAS   = [{"id": "grove", "name": "Glimmer Grove", "color": "#72D46E", "border": "#2E8A2B", "unlock": 0, "emoji": "\ud83c\udf3f", "img": "./img/glimmergrove.png", "x": 160, "y": 310}, {"id": "caves", "name": "Crystal Caves", "color": "#18B8D8", "border": "#1A5FBC", "unlock": 10, "emoji": "\ud83d\udc8e", "img": "./img/crystalcaves.png", "x": 340, "y": 200}, {"id": "sky", "name": "Sky Islands", "color": "#E8C96A", "border": "#6A2EC0", "unlock": 22, "emoji": "\u2601\ufe0f", "img": "./img/skyisland.png", "x": 530, "y": 128}, {"id": "ember", "name": "Ember Volcano", "color": "#F06030", "border": "#C03000", "unlock": 38, "emoji": "\ud83c\udf0b", "img": "./img/embervolcano.png", "x": 670, "y": 235}, {"id": "moon", "name": "Moonlit Ocean", "color": "#4A8FE8", "border": "#0080A8", "unlock": 58, "emoji": "\ud83c\udf0a", "img": "./img/moonlitocean.png", "x": 490, "y": 360}];
 const STAGES  = {"grove": [{"id": "grove_breathing", "name": "Forest Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "Welcome to Glimmer Grove. Find somewhere comfortable and settle in.", "p": 1.5}, {"t": "Place your hands gently on your tummy.", "p": 1.5}, {"t": "We're going to breathe together, nice and slow.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "grove_meditation", "name": "The Golden Pool", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "Close your eyes and imagine you're sitting in Glimmer Grove.", "p": 2.5}, {"t": "Tiny golden lights float between the leaves around you.", "p": 6}, {"t": "Feel the soft grass beneath you.", "p": 6}, {"t": "A gentle breeze carries the scent of flowers.", "p": 7}, {"t": "You are safe here. Completely safe.", "p": 7}, {"t": "Watch the lights drift slowly around you.", "p": 8}, {"t": "One floats close. It's warm and soft.", "p": 7}, {"t": "With every breath, you feel more peaceful.", "p": 7}, {"t": "There's nothing you need to do right now. Just be here.", "p": 8}, {"t": "Stay as long as you like.", "p": 10}, {"t": "When you're ready, gently open your eyes.", "p": 3}]}, {"id": "grove_gratitude", "name": "Counting Fireflies", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about something that made you smile today.", "p": 1}, {"t": "Really let it fill your heart.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about someone who has been kind to you.", "p": 1}, {"t": "Picture their face.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about something about yourself you're really proud of.", "p": 1}, {"t": "You deserve to celebrate this.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "grove_journal", "name": "Lumie's First Page", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "What is one thing that made today interesting?", "p": 1}, {"t": "Take your time. Write as much or as little as you like.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "If you could go anywhere right now, where would it be — and why?", "p": 1}, {"t": "Let your imagination run free.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}], "caves": [{"id": "caves_breathing", "name": "Deep Cave Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "Welcome back to Crystal Caves. Let the cool blue light settle around you.", "p": 1.5}, {"t": "Sit tall and close your eyes if you'd like.", "p": 1.5}, {"t": "Today we'll try box breathing — in, hold, out, hold.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "caves_meditation", "name": "The Still Lake", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "Imagine you're deep inside a crystal cave.", "p": 2.5}, {"t": "Soft blue light reflects off the walls around you.", "p": 6}, {"t": "The crystals hum very gently.", "p": 6}, {"t": "Everything sparkles and glows.", "p": 7}, {"t": "You feel curious and calm at the same time.", "p": 7}, {"t": "There is nothing to worry about in here.", "p": 8}, {"t": "Just peace, and cool quiet air.", "p": 8}, {"t": "Breathe in the stillness.", "p": 8}, {"t": "You belong here.", "p": 8}, {"t": "Rest here a little longer.", "p": 10}, {"t": "When you're ready, gently return.", "p": 3}]}, {"id": "caves_gratitude", "name": "Hidden Gems", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about a place that makes you feel safe.", "p": 1}, {"t": "Picture every detail of it.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about a time you helped someone else.", "p": 1}, {"t": "How did it feel?", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about something small that brought you joy this week.", "p": 1}, {"t": "Even the tiniest thing counts.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "caves_journal", "name": "What the Crystals Know", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "Describe a moment this week when you felt really good.", "p": 1}, {"t": "Try to remember exactly how it felt.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "What's something you'd like to get better at?", "p": 1}, {"t": "Be kind to yourself as you write.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}], "sky": [{"id": "sky_breathing", "name": "Cloud Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "High above the clouds in Sky Islands. The air is light and fresh up here.", "p": 1.5}, {"t": "Let's breathe together.", "p": 1.5}, {"t": "Breathe in slowly...", "p": 4}, {"t": "Hold...", "p": 2.5}, {"t": "Breathe out...", "p": 6}, {"t": "Pause...", "p": 2.5}, {"t": "Breathe in slowly...", "p": 4}, {"t": "Hold...", "p": 2.5}, {"t": "Breathe out...", "p": 6}, {"t": "Pause...", "p": 2.5}, {"t": "Breathe in slowly...", "p": 4}, {"t": "Hold...", "p": 2.5}, {"t": "Breathe out...", "p": 6}, {"t": "Pause...", "p": 2.5}, {"t": "Breathe in slowly...", "p": 4}, {"t": "Hold...", "p": 2.5}, {"t": "Breathe out...", "p": 6}, {"t": "Pause...", "p": 2.5}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "sky_meditation", "name": "Drifting Above", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "You're floating gently on a soft cloud above the Sky Islands.", "p": 2.5}, {"t": "The air is warm and light.", "p": 6}, {"t": "Far below, colourful islands drift peacefully.", "p": 7}, {"t": "You feel weightless.", "p": 7}, {"t": "Nothing can reach you up here.", "p": 8}, {"t": "Just open sky, and the hum of the wind.", "p": 8}, {"t": "You can let everything go for a moment.", "p": 8}, {"t": "You are exactly where you need to be.", "p": 10}, {"t": "Gently open your eyes when you're ready.", "p": 3}]}, {"id": "sky_gratitude", "name": "Island Gifts", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about something in nature you find beautiful.", "p": 1}, {"t": "Let it fill your whole mind.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about a memory that makes you feel warm inside.", "p": 1}, {"t": "Stay with it.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about a challenge you faced and got through.", "p": 1}, {"t": "That took real strength.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "sky_journal", "name": "Writing on the Wind", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "Write about someone who inspires you.", "p": 1}, {"t": "What is it about them that you admire?", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "What does your perfect day look like?", "p": 1}, {"t": "Describe every part of it.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}], "ember": [{"id": "ember_breathing", "name": "Ember Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "The warmth of Ember Volcano wraps around you. Strong and calm.", "p": 1.5}, {"t": "Settle in. Let's breathe.", "p": 1.5}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "ember_meditation", "name": "The Lava Fields", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "You stand at the edge of Ember Volcano, looking out over a glowing landscape.", "p": 2.5}, {"t": "The warmth wraps around you like a cosy blanket.", "p": 6}, {"t": "You feel strong. And peaceful.", "p": 7}, {"t": "Deep beneath the earth, powerful things rest quietly.", "p": 7}, {"t": "You can be powerful and still at the same time.", "p": 8}, {"t": "Breathe in strength.", "p": 8}, {"t": "Breathe out anything heavy.", "p": 7}, {"t": "You are bigger than your worries.", "p": 8}, {"t": "Rest here a moment longer.", "p": 10}, {"t": "Gently open your eyes when you're ready.", "p": 3}]}, {"id": "ember_gratitude", "name": "Warm Harvest", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about someone you love, and why you love them.", "p": 1}, {"t": "Let that feeling grow.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about something your body can do that you're grateful for.", "p": 1}, {"t": "We often forget to say thank you to ourselves.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about a moment today when you felt strong.", "p": 1}, {"t": "Even a small one counts.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "ember_journal", "name": "The Volcano's Secret", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "Describe a time you were brave.", "p": 1}, {"t": "You might surprise yourself.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "What's a worry you could let go of today?", "p": 1}, {"t": "Write it down, then imagine releasing it.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}], "moon": [{"id": "moon_breathing", "name": "Tide Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "The moonlit ocean stretches out. Let its rhythm guide you.", "p": 1.5}, {"t": "No counting tonight. Just follow your own breath.", "p": 1.5}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "moon_meditation", "name": "Silver Water", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "You're sitting on a moonlit beach, watching the ocean breathe.", "p": 2.5}, {"t": "Silver light reflects on the water.", "p": 6}, {"t": "The waves are steady and gentle.", "p": 7}, {"t": "You have nowhere to be and nothing to do.", "p": 8}, {"t": "Just this moment. Just this breath.", "p": 8}, {"t": "The moon watches over you.", "p": 7}, {"t": "The earth holds you.", "p": 7}, {"t": "You are enough. Exactly as you are.", "p": 10}, {"t": "Come back gently, in your own time.", "p": 3}]}, {"id": "moon_gratitude", "name": "Moon Wishes", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about a dream or hope you're holding.", "p": 1}, {"t": "Let yourself believe in it.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about something you learned recently.", "p": 1}, {"t": "Learning is a gift.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about three things you're thankful for right now — let them come naturally.", "p": 1}, {"t": "Take your time with each one.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "moon_journal", "name": "The Last Page", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "Write about something you're really looking forward to.", "p": 1}, {"t": "Let yourself feel excited.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "If Lumie could talk, what do you think she'd say to you right now?", "p": 1}, {"t": "Let her be kind.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}]};
-const SHOP    = {"outfits": [{"id": "lumiemain", "name": "Default outfit", "cost": 0, "img": "lumiemain"}, {"id": "lumiekimono", "name": "Cherry kimono", "cost": 18, "img": "lumiekimono"}, {"id": "lumieeveningdress", "name": "Silver gown", "cost": 22, "img": "lumieeveningdress"}, {"id": "lumiesports", "name": "Sports hoodie", "cost": 15, "img": "lumiesports"}], "companions": [{"id": "c_cat", "name": "Moon cat", "emoji": "\ud83d\udc31", "cost": 12}, {"id": "c_bunny", "name": "Mini bunny", "emoji": "\ud83d\udc07", "cost": 12}, {"id": "c_dragon", "name": "Baby dragon", "emoji": "\ud83d\udc09", "cost": 18}, {"id": "c_turtle", "name": "Wise turtle", "emoji": "\ud83d\udc22", "cost": 15}, {"id": "c_bird", "name": "Songbird", "emoji": "\ud83d\udc26", "cost": 10}, {"id": "c_fox", "name": "Starfox", "emoji": "\ud83e\udd8a", "cost": 14}], "toys": [{"id": "t_balloon", "name": "Moon balloon", "emoji": "\ud83c\udf88", "cost": 4}, {"id": "t_wand", "name": "Magic wand", "emoji": "\ud83e\ude84", "cost": 7}, {"id": "t_rainbow", "name": "Rainbow", "emoji": "\ud83c\udf08", "cost": 5}, {"id": "t_lantern", "name": "Glow lantern", "emoji": "\ud83c\udfee", "cost": 6}, {"id": "t_star", "name": "Lucky star", "emoji": "\u2b50", "cost": 4}, {"id": "t_music", "name": "Music box", "emoji": "\ud83c\udfb5", "cost": 8}]};
+const SHOP    = {"outfits": [{"id": "lumiemain", "name": "Default outfit", "cost": 0, "img": "lumiemain"}, {"id": "lumiekimono", "name": "Cherry kimono", "cost": 18, "img": "lumiekimono"}, {"id": "lumieeveningdress", "name": "Silver gown", "cost": 22, "img": "lumieeveningdress"}, {"id": "lumiesports", "name": "Sports hoodie", "cost": 15, "img": "lumiesports"}, {"id": "lumiehawaii", "name": "Aloha days", "cost": 16, "img": "lumiehawaii"}], "companions": [{"id": "c_cat", "name": "Moon cat", "emoji": "\ud83d\udc31", "cost": 12}, {"id": "c_bunny", "name": "Mini bunny", "emoji": "\ud83d\udc07", "cost": 12}, {"id": "c_dragon", "name": "Baby dragon", "emoji": "\ud83d\udc09", "cost": 18}, {"id": "c_turtle", "name": "Wise turtle", "emoji": "\ud83d\udc22", "cost": 15}, {"id": "c_bird", "name": "Songbird", "emoji": "\ud83d\udc26", "cost": 10}, {"id": "c_fox", "name": "Starfox", "emoji": "\ud83e\udd8a", "cost": 14}], "toys": [{"id": "t_balloon", "name": "Moon balloon", "emoji": "\ud83c\udf88", "cost": 4}, {"id": "t_wand", "name": "Magic wand", "emoji": "\ud83e\ude84", "cost": 7}, {"id": "t_rainbow", "name": "Rainbow", "emoji": "\ud83c\udf08", "cost": 5}, {"id": "t_lantern", "name": "Glow lantern", "emoji": "\ud83c\udfee", "cost": 6}, {"id": "t_star", "name": "Lucky star", "emoji": "\u2b50", "cost": 4}, {"id": "t_music", "name": "Music box", "emoji": "\ud83c\udfb5", "cost": 8}], "eyewear": [{"id": "ew_pink", "name": "Pink frames", "cost": 8, "img": "ew_pink"}, {"id": "ew_black", "name": "Black frames", "cost": 8, "img": "ew_black"}, {"id": "ew_red", "name": "Red frames", "cost": 10, "img": "ew_red"}, {"id": "ew_masquerade", "name": "Masquerade", "cost": 14, "img": "ew_masquerade"}]};
 
 const TYPE_SPRITE = {breathing:'hugs',meditation:'meditating',gratitude:'gratitude',journal:'journal'};
 const TYPE_COLOR  = {
@@ -665,7 +706,7 @@ let currentUser = null;
 let state = {};
 
 function defaultState() {
-  return {stars:0,stagesDone:{},owned:{'lumiemain':true},equipped:{outfit:'lumiemain'},apiKey:null,voiceId:null,voiceName:null};
+  return {stars:0,stagesDone:{},owned:{'lumiemain':true},equipped:{outfit:'lumiemain',eyewear:null},apiKey:null,voiceId:null,voiceName:null};
 }
 function loadUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)||'[]'); } catch{return[];} }
 function saveUsers(u) { localStorage.setItem(USERS_KEY,JSON.stringify(u)); }
@@ -770,8 +811,8 @@ function renderMap() {
     circle.style.overflow = 'hidden';
     circle.style.padding = area.img ? '0' : '';
     circle.innerHTML = aState==='locked'
-      ? (area.img ? `<img src="${area.img}" style="width:100px;height:100px;object-fit:cover;border-radius:50%;opacity:0.4;filter:grayscale(0.85);">` : '<span style="font-size:22px;">🔒</span>')
-      : (area.img ? `<img src="${area.img}" style="width:108px;height:108px;object-fit:cover;border-radius:50%;">` : `<span style="font-size:26px;">${area.emoji}</span>`);  const label = document.createElement('div');
+      ? (area.img ? `<img src="${area.img}" style="width:124px;height:124px;object-fit:cover;border-radius:50%;opacity:0.4;filter:grayscale(0.85);">` : '<span style="font-size:22px;">🔒</span>')
+      : (area.img ? `<img src="${area.img}" style="width:132px;height:132px;object-fit:cover;border-radius:50%;">` : `<span style="font-size:26px;">${area.emoji}</span>`);  const label = document.createElement('div');
     label.className = 'map-node-label';
     label.textContent = area.name;
     node.appendChild(circle); node.appendChild(label);
@@ -943,10 +984,19 @@ function renderRoom() {
   const outfitItem = SHOP.outfits.find(o=>o.id===outfit);
   const lbl=document.getElementById('outfit-label');
   lbl.textContent = (outfitItem && outfit!=='lumiemain') ? '👗 '+outfitItem.name : '';
+  // Eyewear overlay
+  const ewImg=document.getElementById('room-eyewear-img');
+  if(state.equipped.eyewear && EYEWEAR_IMGS[state.equipped.eyewear]) {
+    ewImg.src=EYEWEAR_IMGS[state.equipped.eyewear];
+    ewImg.style.display='block';
+  } else {
+    ewImg.style.display='none';
+  }
   const itemsDiv=document.getElementById('room-items');
   const emptyDiv=document.getElementById('room-empty');
   itemsDiv.innerHTML='';
   let hasItems=false;
+  // Companions and toys chips
   [...SHOP.companions,...SHOP.toys].forEach(item=>{
     if(state.equipped[item.id]) {
       hasItems=true;
@@ -965,6 +1015,18 @@ function renderRoom() {
       itemsDiv.appendChild(chip);
     }
   });
+  // Eyewear chips
+  SHOP.eyewear.forEach(item=>{
+    if(!state.owned[item.id]) return;
+    const isOn = state.equipped.eyewear===item.id;
+    hasItems=true;
+    const chip=document.createElement('div');
+    chip.className='room-item-chip'+(isOn?' active':'');
+    chip.innerHTML=`<span>👓</span><span${isOn?'':' style="color:#aaa;"'}>${item.name}</span>`;
+    chip.title=isOn?'Tap to remove':'Tap to wear';
+    chip.onclick=()=>{equipEyewear(item.id);renderRoom();};
+    itemsDiv.appendChild(chip);
+  });
   emptyDiv.style.display=(hasItems||Object.keys(state.owned).filter(k=>k!=='lumiemain'&&state.owned[k]).length>0)?'none':'block';
 }
 
@@ -976,8 +1038,20 @@ function switchTab(tab,btn) {
   btn.classList.add('active');
   renderShop(tab);
 }
+function updateShopPreview() {
+  const outfit = state.equipped.outfit || 'lumiemain';
+  document.getElementById('shop-preview-outfit').src = OUTFIT_IMGS[outfit] || SPRITES.main;
+  const ewEl = document.getElementById('shop-preview-eyewear');
+  if(state.equipped.eyewear && EYEWEAR_IMGS[state.equipped.eyewear]) {
+    ewEl.src = EYEWEAR_IMGS[state.equipped.eyewear];
+    ewEl.style.display = 'block';
+  } else {
+    ewEl.style.display = 'none';
+  }
+}
 function renderShop(tab) {
   currentTab=tab||currentTab;
+  updateShopPreview();
   const grid=document.getElementById('shop-grid');
   grid.innerHTML='';
   const items=SHOP[currentTab]||[];
@@ -985,13 +1059,17 @@ function renderShop(tab) {
     const owned=!!state.owned[item.id];
     const isEquipped = currentTab==='outfits'
       ? state.equipped.outfit===item.id
-      : !!state.equipped[item.id];
+      : currentTab==='eyewear'
+        ? state.equipped.eyewear===item.id
+        : !!state.equipped[item.id];
     const canAfford=state.stars>=item.cost;
     const card=document.createElement('div');
     card.className='shop-card'+(owned?' owned':'')+(isEquipped?' equipped':'');
     let thumb='';
     if(currentTab==='outfits') {
       thumb=`<img class="shop-outfit-img" src="${OUTFIT_IMGS[item.img]||SPRITES.main}" alt="${item.name}"/>`;
+    } else if(currentTab==='eyewear') {
+      thumb=`<img class="shop-outfit-img" src="${EYEWEAR_IMGS[item.img]||''}" alt="${item.name}"/>`;
     } else {
       thumb=`<div class="shop-emoji">${item.emoji}</div>`;
     }
@@ -1004,6 +1082,10 @@ function renderShop(tab) {
       btnHtml=isEquipped
         ?`<button class="shop-btn equipped">✓ Wearing</button>`
         :`<button class="shop-btn wear" onclick="equipOutfit('${item.id}')">Wear</button>`;
+    } else if(currentTab==='eyewear') {
+      btnHtml=isEquipped
+        ?`<button class="shop-btn equipped" onclick="equipEyewear('${item.id}')">✓ Wearing</button>`
+        :`<button class="shop-btn wear" onclick="equipEyewear('${item.id}')">Wear</button>`;
     } else {
       btnHtml=isEquipped
         ?`<button class="shop-btn toggle-on" onclick="toggleItem('${item.id}')">✓ Displayed</button>`
@@ -1019,20 +1101,26 @@ function renderShop(tab) {
 }
 
 function buyItem(id, tab) {
-  const items=[...SHOP.outfits,...SHOP.companions,...SHOP.toys];
+  const items=[...SHOP.outfits,...SHOP.companions,...SHOP.toys,...SHOP.eyewear];
   const item=items.find(i=>i.id===id);
   if(!item||state.owned[id]||state.stars<item.cost) return;
   state.stars-=item.cost;
   state.owned[id]=true;
   if(tab==='outfits') state.equipped.outfit=id;
+  if(tab==='eyewear') state.equipped.eyewear=id;
   saveState(); updateAllStars();
-  toast('Got '+item.name+'! '+(item.emoji||'👗'));
+  toast('Got '+item.name+'! '+(item.emoji||'👓'));
   renderShop(tab);
 }
 
 function equipOutfit(id) {
   state.equipped.outfit=id;
   saveState(); renderShop('outfits');
+}
+
+function equipEyewear(id) {
+  state.equipped.eyewear = (state.equipped.eyewear===id) ? null : id;
+  saveState(); renderShop('eyewear');
 }
 
 function toggleItem(id) {
@@ -1106,6 +1194,70 @@ function confirmVoice() {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 initWelcome();
+
+// ── ADMIN ─────────────────────────────────────────────────────────────────────
+let adminSnapshot = null;
+
+function openAdminModal() {
+  document.getElementById('admin-pw').value='';
+  document.getElementById('admin-modal').classList.add('open');
+  document.getElementById('admin-pw').focus();
+}
+function closeAdminModal() {
+  document.getElementById('admin-modal').classList.remove('open');
+}
+function submitAdminPw() {
+  const pw = document.getElementById('admin-pw').value;
+  if(pw !== 'fatbear') { toast('Wrong password ❌'); closeAdminModal(); return; }
+  closeAdminModal();
+  if(!currentUser) { toast('Log in first!'); return; }
+  // Snapshot current state before changes
+  adminSnapshot = {
+    stars: state.stars,
+    owned: JSON.parse(JSON.stringify(state.owned)),
+    stagesDone: JSON.parse(JSON.stringify(state.stagesDone))
+  };
+  // Unlock all stages and give max stars (items still need to be purchased)
+  [...Object.values(STAGES)].flat().forEach(s=>{ state.stagesDone[s.id]=true; });
+  state.stars = 999;
+  saveState(); updateAllStars(); renderMap(); renderRoom();
+  document.getElementById('admin-active-bar').classList.add('show');
+  toast('🔧 Admin mode active — stages unlocked, 999 ⭐');
+}
+function exitAdminMode() {
+  if(!adminSnapshot) return;
+  state.stars = adminSnapshot.stars;
+  state.owned = adminSnapshot.owned;
+  state.stagesDone = adminSnapshot.stagesDone;
+  adminSnapshot = null;
+  saveState(); updateAllStars(); renderMap(); renderRoom();
+  document.getElementById('admin-active-bar').classList.remove('show');
+  toast('Admin mode exited — progress restored');
+}
+document.getElementById('admin-pw').addEventListener('keydown', e=>{ if(e.key==='Enter') submitAdminPw(); });
 </script>
+
+<!-- Admin trigger button -->
+<button id="admin-btn" onclick="openAdminModal()">⚙</button>
+
+<!-- Admin password modal -->
+<div id="admin-modal">
+  <div class="admin-box">
+    <h3>🔧 Admin Access</h3>
+    <p>Enter password to unlock test mode</p>
+    <input id="admin-pw" type="password" placeholder="Password" autocomplete="off"/>
+    <div class="admin-row">
+      <button class="admin-cancel" onclick="closeAdminModal()">Cancel</button>
+      <button class="admin-ok" onclick="submitAdminPw()">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin active indicator -->
+<div class="admin-active-bar" id="admin-active-bar">
+  <span>🔧 Admin test mode active</span>
+  <button class="admin-exit-btn" onclick="exitAdminMode()">Exit admin</button>
+</div>
+
 </body>
 </html>
