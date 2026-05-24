@@ -310,16 +310,30 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
   .back-btn{font-size:12px;padding:4px 9px;}
   .top-bar{padding:8px 10px;}
 
-  /* Map */
+  /* Map — top bar: hide the right buttons from the bar */
   .map-topbar-lumie{width:100px;height:100px;}
   #map-screen .top-bar .top-left{padding-left:160px;}
+  #map-screen .top-bar{justify-content:flex-start;}
   .map-node-circle{width:90px;height:90px;}
-  .map-node-label{font-size:11px;}
+  .map-node-label{font-size:13px;padding:3px 10px;}
   .top-title{font-size:15px;}
   #map-screen .top-left .top-title{font-size:26px;}
 
   /* Map node images */
   .map-node-img{width:82px;height:82px;}
+
+  /* Map — move buttons to bottom bar */
+  #map-screen .top-right{
+    position:fixed;bottom:0;left:0;right:0;
+    background:rgba(255,255,255,0.96);
+    backdrop-filter:blur(8px);
+    border-top:1.5px solid rgba(78,158,77,0.2);
+    padding:10px 16px;
+    justify-content:space-evenly;
+    z-index:50;
+  }
+  /* Add padding so map nodes aren't hidden behind bottom bar */
+  .map-container{padding-bottom:64px;}
 
   /* Room */
   .room-stage{width:220px;height:220px;}
