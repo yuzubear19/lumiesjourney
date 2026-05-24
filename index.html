@@ -302,6 +302,12 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
 .map-node-img{width:132px;height:132px;object-fit:cover;border-radius:50%;}
 .map-node-img--locked{opacity:0.4;filter:grayscale(0.85);}
 
+/* Map mobile bottom nav — hidden on desktop */
+.map-mobile-nav{display:none;position:absolute;bottom:0;left:0;right:0;
+  background:rgba(255,255,255,0.96);border-top:1.5px solid rgba(78,158,77,0.2);
+  padding:10px 16px;align-items:center;justify-content:space-evenly;
+  z-index:50;gap:8px;}
+
 /* ══ MOBILE ══ */
 @media (max-width: 480px) {
   /* Top bar */
@@ -322,16 +328,9 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
   /* Map node images */
   .map-node-img{width:82px;height:82px;}
 
-  /* Map — move buttons to bottom bar */
-  #map-screen .top-right{
-    position:fixed;bottom:0;left:0;right:0;
-    background:rgba(255,255,255,0.96);
-    backdrop-filter:blur(8px);
-    border-top:1.5px solid rgba(78,158,77,0.2);
-    padding:10px 16px;
-    justify-content:space-evenly;
-    z-index:50;
-  }
+  /* Map — hide top-right buttons from top bar, show bottom nav instead */
+  #map-screen .top-right{display:none;}
+  .map-mobile-nav{display:flex !important;}
   /* Add padding so map nodes aren't hidden behind bottom bar */
   .map-container{padding-bottom:64px;}
 
@@ -384,6 +383,12 @@ html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
       <button class="icon-btn" id="shop-nav-btn" onclick="showScreen('shop-screen')">🛍 Shop</button>
       <div class="star-pill">⭐ <span class="star-display">0</span></div>
     </div>
+  </div>
+  <div class="map-mobile-nav">
+    <button class="icon-btn" onclick="switchUser()">👋 <span id="user-pill-mobile">...</span></button>
+    <button class="icon-btn" onclick="showScreen('api-screen')">🎙 Voice</button>
+    <button class="icon-btn" onclick="showScreen('shop-screen')">🛍 Shop</button>
+    <div class="star-pill">⭐ <span class="star-display">0</span></div>
   </div>
   <div class="map-container">
     <div class="map-canvas" id="map-canvas">
@@ -803,6 +808,7 @@ function startJourney() {
   const users = loadUsers();
   if (!users.includes(name)) { users.push(name); saveUsers(users); }
   document.getElementById('user-pill').textContent = name;
+  document.getElementById('user-pill-mobile').textContent = name;
   if (state.voiceId) {
     document.getElementById('voice-btn').textContent = '🎙 ' + (state.voiceName ? state.voiceName.replace(/\s*[-\u2013\u2014]+.*$/, '').trim() : state.voiceName);
     document.getElementById('voice-btn').classList.add('connected');
