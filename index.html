@@ -954,8 +954,17 @@ function openStage(area,stage) {
 
 function backFromPlayer() { stopPlay(); showScreen('stages-screen'); }
 
+let audioUnlocked=false;
+function unlockAudio() {
+  if(audioUnlocked) return;
+  const sil='data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+  const a=new Audio(sil);
+  a.play().then(()=>{audioUnlocked=true;}).catch(()=>{});
+}
+
 function playStart() {
   if(!currentStage) return;
+  unlockAudio();
   isPlaying=true; lineIdx=0;
   setPlayerPanel('playing');
   runLine();
@@ -1000,11 +1009,12 @@ async function speakLine(text) {
     const blob=await res.blob();
     const url=URL.createObjectURL(blob);
     await new Promise(res=>{
-      if(!isPlaying){res();return;}
+      if(!isPlaying){URL.revokeObjectURL(url);res();return;}
       audioObj=new Audio(url);
       audioObj.onended=()=>{URL.revokeObjectURL(url);res();};
-      audioObj.onerror=res;
-      audioObj.play();
+      audioObj.onerror=()=>{URL.revokeObjectURL(url);res();};
+      const p=audioObj.play();
+      if(p!==undefined) p.catch(()=>{URL.revokeObjectURL(url);res();});
     });
   } catch(e){}
 }
