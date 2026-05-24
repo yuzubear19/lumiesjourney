@@ -929,7 +929,7 @@ function openArea(area) {
 }
 
 // ── PLAYER ────────────────────────────────────────────────────────────────────
-let isPlaying=false, waitId=null, audioObj=null, lineIdx=0;
+let isPlaying=false, waitId=null, audioObj=null, lineIdx=0, playbackAudio=null;
 
 function openStage(area,stage) {
   currentArea=area; currentStage=stage;
@@ -957,9 +957,10 @@ function backFromPlayer() { stopPlay(); showScreen('stages-screen'); }
 let audioUnlocked=false;
 function unlockAudio() {
   if(audioUnlocked) return;
+  playbackAudio=new Audio();
   const sil='data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-  const a=new Audio(sil);
-  a.play().then(()=>{audioUnlocked=true;}).catch(()=>{});
+  playbackAudio.src=sil;
+  playbackAudio.play().then(()=>{audioUnlocked=true;}).catch(()=>{});
 }
 
 function playStart() {
@@ -1010,10 +1011,13 @@ async function speakLine(text) {
     const url=URL.createObjectURL(blob);
     await new Promise(res=>{
       if(!isPlaying){URL.revokeObjectURL(url);res();return;}
-      audioObj=new Audio(url);
-      audioObj.onended=()=>{URL.revokeObjectURL(url);res();};
-      audioObj.onerror=()=>{URL.revokeObjectURL(url);res();};
-      const p=audioObj.play();
+      const audio=playbackAudio||new Audio();
+      audioObj=audio;
+      audio.onended=()=>{URL.revokeObjectURL(url);res();};
+      audio.onerror=()=>{URL.revokeObjectURL(url);res();};
+      audio.src=url;
+      audio.load();
+      const p=audio.play();
       if(p!==undefined) p.catch(()=>{URL.revokeObjectURL(url);res();});
     });
   } catch(e){}
