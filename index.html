@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Lumie's Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Baloo+2:wght@700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#2E8A2B;--green-l:#52C44E;--green-p:#E8F8E8;
+  --peach:#FFF0DC;--cream:#FDF8F0;
+  --gold:#F5C06A;--text:#3D2B1F;--text-m:#6B4C3B;--text-s:#9B7B6B;
+  --r:16px;--rs:10px;
+  --fh:'Poppins',sans-serif;--fb:'Poppins',sans-serif;
+}
+html,body{height:100%;overflow:hidden;background:#f0e8d8;font-family:var(--fb);}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;background:rgba(255,255,255,0.88);
+  backdrop-filter:blur(8px);border-bottom:1.5px solid rgba(78,158,77,0.15);
+  flex-shrink:0;z-index:10;}
+.top-left{display:flex;align-items:center;gap:8px;}
+#map-screen .top-bar .top-left{padding-left:260px;}
+.top-right{display:flex;align-items:center;gap:8px;}
+.top-title{font-family:var(--fh);font-size:20px;color:var(--text);}#user-pill,#voice-btn,#shop-nav-btn{font-family:'Baloo 2',cursive;}
+.back-btn{font-family:var(--fb);font-size:14px;font-weight:700;color:var(--green);
+  background:var(--green-p);border:1.5px solid var(--green-l);
+  border-radius:20px;padding:5px 12px;cursor:pointer;}
+.back-btn:hover{background:#d0edcc;}
+.icon-btn{font-family:var(--fb);font-size:13px;font-weight:700;
+  background:var(--green-p);border:1.5px solid var(--green-l);
+  border-radius:20px;padding:5px 11px;color:var(--green);cursor:pointer;}
+.icon-btn:hover{background:#d0edcc;}
+.icon-btn.connected{background:#d0edcc;color:#1a5a18;}
+.star-pill{background:#FFF8DC;border:1.5px solid #F5C06A;border-radius:20px;
+  padding:5px 12px;font-family:var(--fh);font-size:16px;color:#B8860B;}
+.map-topbar-lumie{width:250px;height:250px;object-fit:contain;cursor:pointer;
+  border-radius:0;border:none;background:transparent;
+  padding:0;transition:transform 0.15s;
+  position:absolute;top:0;left:0;z-index:20;
+  filter:drop-shadow(0 6px 18px rgba(0,0,0,0.18));}
+.map-topbar-lumie:hover{transform:scale(1.04);}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:#3D2B1F;color:#fff;font-family:var(--fb);font-size:13px;font-weight:700;
+  padding:10px 22px;border-radius:24px;z-index:9999;opacity:0;
+  transition:all 0.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ══ WELCOME ══ */
+#welcome-screen{
+  background:linear-gradient(160deg,#E8F8E0 0%,#FFF8EC 60%,#FFF0E8 100%);
+  align-items:center;justify-content:center;
+}
+.welcome-inner{display:flex;flex-direction:column;align-items:center;gap:14px;
+  padding:24px 20px;max-width:380px;width:100%;}
+.welcome-lumie{width:180px;height:180px;object-fit:contain;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,0.12));
+}
+.welcome-title{font-family:var(--fh);font-size:32px;color:var(--text);text-align:center;}
+.welcome-sub{font-family:var(--fb);font-size:16px;color:var(--text-m);text-align:center;
+  line-height:1.6;max-width:280px;}
+.welcome-input{width:100%;max-width:300px;padding:13px 18px;border-radius:24px;
+  border:2px solid var(--green-l);background:#fff;font-family:var(--fh);
+  font-size:18px;color:var(--text);text-align:center;outline:none;
+  box-shadow:0 2px 12px rgba(82,196,78,0.15);}
+.welcome-input:focus{border-color:var(--green);box-shadow:0 2px 16px rgba(82,196,78,0.25);}
+.welcome-btn{font-family:var(--fh);font-size:18px;background:var(--green-l);
+  color:#fff;border:none;border-radius:30px;padding:13px 40px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(82,196,78,0.35);transition:transform 0.15s,box-shadow 0.15s;}
+.welcome-btn:hover{transform:scale(1.04);box-shadow:0 6px 22px rgba(82,196,78,0.45);}
+.profiles-label{font-family:var(--fb);font-size:12px;color:var(--text-s);font-weight:700;
+  text-transform:uppercase;letter-spacing:0.05em;}
+.profiles-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:320px;}
+.profile-chip{font-family:var(--fh);font-size:14px;background:#fff;
+  border:2px solid var(--green-l);border-radius:20px;padding:6px 16px;
+  color:var(--green);cursor:pointer;transition:all 0.15s;}
+.profile-chip{position:relative;}
+.profile-chip:hover{background:var(--green-p);transform:scale(1.05);}
+.profile-chip .delete-x{display:none;position:absolute;top:-7px;right:-7px;
+  width:18px;height:18px;background:#e55;color:#fff;border-radius:50%;
+  font-size:13px;line-height:18px;text-align:center;font-weight:bold;
+  cursor:pointer;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.profile-chip:hover .delete-x{display:block;}
+
+/* ══ MAP ══ */
+#map-screen{background:var(--peach);}
+.map-container{flex:1;overflow:hidden;position:relative;}
+.map-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.map-bg-svg{position:absolute;inset:0;width:100%;height:100%;}
+
+.map-node{position:absolute;transform:translate(-50%,-50%);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:5px;z-index:5;}
+.map-node-circle{width:116px;height:116px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  border:4px solid rgba(255,255,255,0.7);
+  box-shadow:0 4px 18px rgba(0,0,0,0.2);
+  transition:transform 0.2s,box-shadow 0.2s;position:relative;}
+.map-node:hover .map-node-circle{transform:scale(1.1);box-shadow:0 6px 24px rgba(0,0,0,0.28);}
+.map-node-label{font-family:var(--fh);font-size:13px;color:var(--text);
+  background:rgba(255,255,255,0.9);border-radius:10px;padding:2px 8px;
+  white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+.map-node.locked .map-node-circle{filter:grayscale(0.75);opacity:0.55;cursor:not-allowed;}
+.map-node.completed .map-node-circle::after{
+  content:"✓";position:absolute;top:-6px;right:-6px;
+  background:#4CAF50;color:#fff;border-radius:50%;width:22px;height:22px;
+  font-size:12px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fb);font-weight:700;}
+.map-node.inprogress .map-node-circle{animation:glow 2s ease-in-out infinite;}
+@keyframes glow{
+  0%,100%{box-shadow:0 0 0 0 rgba(245,192,106,0.5),0 4px 18px rgba(0,0,0,0.2);}
+  50%{box-shadow:0 0 0 10px rgba(245,192,106,0.18),0 4px 18px rgba(0,0,0,0.2);}
+}
+
+.map-lumie-marker{width:96px;height:72px;object-fit:contain;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,0.22));display:block;}
+.map-lumie-block{position:absolute;transform:translate(-50%,-50%);z-index:8;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  transition:left 0.9s cubic-bezier(.4,0,.2,1),top 0.9s cubic-bezier(.4,0,.2,1);}
+.map-lumie-label{font-family:var(--fh);font-size:12px;font-weight:700;color:#3D2B1F;
+  background:rgba(255,255,255,0.9);border-radius:10px;padding:2px 10px;
+  white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.14);}
+.map-deco{position:absolute;z-index:3;pointer-events:none;
+  animation:deco 3.5s ease-in-out infinite;}
+@keyframes deco{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-5px) rotate(3deg);}}
+
+/* ══ STAGES ══ */
+#stages-screen{background:var(--cream);}
+.stages-banner{padding:16px 16px 10px;font-family:var(--fh);font-size:24px;
+  text-align:center;color:#fff;flex-shrink:0;}
+.stages-scroll{flex:1;overflow-y:auto;padding:12px 12px 24px;}
+.stages-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:480px;margin:0 auto;}
+.stage-card{background:#fff;border-radius:var(--r);border:2px solid #eee;
+  overflow:hidden;cursor:pointer;transition:transform 0.18s,box-shadow 0.18s;
+  display:flex;flex-direction:column;align-items:center;padding:16px 10px 14px;position:relative;}
+.stage-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.11);}
+.stage-card.done{border-color:#52C44E;background:#F0FAF0;}
+.stage-card.done::after{content:"✓";position:absolute;top:8px;right:10px;
+  color:#4CAF50;font-family:var(--fb);font-weight:700;font-size:14px;}
+.stage-sprite{width:100px;height:100px;object-fit:contain;margin-bottom:10px;}
+.stage-badge{font-family:var(--fh);font-size:13px;border-radius:12px;padding:4px 11px;margin-bottom:6px;}
+.stage-name{font-family:var(--fh);font-size:16px;color:var(--text);text-align:center;margin-bottom:4px;}
+.stage-hint{font-family:var(--fb);font-size:13px;color:var(--text-s);text-align:center;line-height:1.4;}
+.stage-stars{font-family:var(--fh);font-size:12px;color:#B8860B;margin-top:4px;}
+
+/* ══ PLAYER ══ */
+#player-screen{background:linear-gradient(160deg,#1a2a18,#2a4a28);}
+#player-screen .top-bar{background:rgba(20,38,18,0.9);border-color:rgba(127,188,125,0.2);}
+#player-screen .back-btn{background:rgba(127,188,125,0.15);border-color:rgba(127,188,125,0.3);color:#8fbc8d;}
+#player-screen .star-pill{background:rgba(245,192,106,0.15);border-color:rgba(245,192,106,0.3);color:#e0b84a;}
+.player-inner{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:20px;gap:14px;overflow:hidden;}
+.player-lumie{width:260px;height:260px;object-fit:contain;
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,0.28));}
+.player-area-tag{font-family:var(--fh);font-size:14px;border-radius:16px;padding:5px 15px;}
+.player-stage-name{font-family:var(--fh);font-size:24px;color:#fff;text-align:center;}
+.player-hint{font-family:var(--fb);font-size:15px;color:#8fbc8d;text-align:center;
+  max-width:280px;line-height:1.5;}
+.play-btn{font-family:var(--fh);font-size:18px;background:var(--gold);color:#fff;
+  border:none;border-radius:30px;padding:14px 40px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(245,192,106,0.4);transition:transform 0.15s,box-shadow 0.15s;}
+.play-btn:hover{transform:scale(1.05);box-shadow:0 6px 22px rgba(245,192,106,0.5);}
+.voice-note{font-family:var(--fb);font-size:11px;color:#4a6040;text-align:center;max-width:260px;}
+.playing-line{font-family:var(--fb);font-size:17px;color:#c8d8c4;text-align:center;
+  max-width:320px;line-height:1.7;min-height:80px;display:flex;align-items:center;
+  justify-content:center;transition:opacity 0.4s;}
+.prog-wrap{width:280px;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;}
+.prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width 0.5s;}
+.stop-btn{font-family:var(--fb);font-size:14px;font-weight:700;
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+  color:#8fbc8d;border-radius:20px;padding:8px 20px;cursor:pointer;}
+.completion-lumie{width:260px;height:260px;object-fit:contain;
+  animation:popIn 0.5s ease-out;}
+@keyframes popIn{0%{transform:scale(0.5);opacity:0;}70%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+.star-earned{font-family:var(--fh);font-size:32px;color:var(--gold);
+  animation:starPop 0.6s ease-out 0.3s both;}
+@keyframes starPop{0%{transform:scale(0);}70%{transform:scale(1.3);}100%{transform:scale(1);}}
+.done-msg{font-family:var(--fh);font-size:22px;color:#fff;text-align:center;}
+.done-sub{font-family:var(--fb);font-size:14px;color:#8fbc8d;text-align:center;}
+.next-btn{font-family:var(--fh);font-size:16px;background:var(--gold);color:#fff;
+  border:none;border-radius:30px;padding:12px 32px;cursor:pointer;margin-top:6px;}
+.next-btn:hover{background:#e0a850;}
+
+/* ══ ROOM ══ */
+#room-screen{position:relative;background:transparent;}
+.room-bg-svg{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+.room-content{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;padding-top:18%;position:relative;z-index:1;overflow:hidden;padding-bottom:16px;gap:8px;}
+.room-stage{width:310px;height:310px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;}
+.room-lumie-img{width:300px;height:300px;object-fit:contain;object-position:bottom;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,0.14));}
+.room-outfit-label{font-family:var(--fh);font-size:14px;color:var(--text-m);
+  background:rgba(255,255,255,0.8);border-radius:12px;padding:3px 12px;}
+.room-items{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  padding:6px 16px;max-width:400px;overflow-y:auto;max-height:120px;}
+.room-item-chip{background:rgba(255,255,255,0.85);border-radius:12px;padding:5px 12px;
+  font-family:var(--fb);font-size:13px;border:1.5px solid #e0d0c0;
+  display:flex;align-items:center;gap:5px;cursor:pointer;transition:all 0.15s;}
+.room-item-chip.active{border-color:var(--green-l);background:#e8f8e4;}
+.room-item-chip:hover{transform:scale(1.04);}
+.room-empty{font-family:var(--fb);font-size:14px;color:var(--text-s);
+  text-align:center;padding:10px;background:rgba(255,255,255,0.7);
+  border-radius:12px;margin:0 20px;
+  position:absolute;bottom:8%;left:50%;transform:translateX(-50%);
+  white-space:nowrap;z-index:3;}
+.room-shop-link{font-family:var(--fh);font-size:16px;background:var(--green-l);
+  color:#fff;border:none;border-radius:24px;padding:12px 32px;cursor:pointer;
+  flex-shrink:0;box-shadow:0 4px 14px rgba(82,196,78,0.3);letter-spacing:0.01em;}
+.room-shop-link:hover{background:var(--green);}
+
+/* ══ SHOP ══ */
+#shop-screen{background:var(--cream);}
+.shop-header{display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:12px;background:#fff;border-bottom:1.5px solid #eee;flex-shrink:0;cursor:pointer;}
+.shop-header-lumie{width:52px;height:52px;object-fit:contain;}
+.shop-header-text{font-family:var(--fh);font-size:18px;color:var(--text);}
+.shop-tabs{display:flex;padding:10px 12px 0;gap:8px;flex-shrink:0;}
+.shop-tab{font-family:var(--fh);font-size:13px;padding:7px 15px;border-radius:20px;
+  border:2px solid #ddd;background:#fff;color:var(--text-m);cursor:pointer;transition:all 0.15s;}
+.shop-tab.active{background:var(--green-l);color:#fff;border-color:var(--green-l);}
+.shop-scroll{flex:1;overflow-y:auto;padding:12px 12px 24px;}
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:460px;margin:0 auto;}
+.shop-card{background:#fff;border-radius:var(--r);border:2px solid #eee;
+  padding:14px 10px 12px;display:flex;flex-direction:column;align-items:center;gap:5px;
+  transition:transform 0.15s,box-shadow 0.15s;}
+.shop-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.08);}
+.shop-card.owned{border-color:#52C44E;background:#F0FAF0;}
+.shop-card.equipped{border-color:#F5C06A;background:#FFF8DC;}
+.shop-outfit-img{width:120px;height:120px;object-fit:contain;}
+.shop-emoji{font-size:36px;}
+.shop-name{font-family:var(--fh);font-size:15px;color:var(--text);text-align:center;}
+.shop-desc-cost{font-family:var(--fh);font-size:14px;color:#B8860B;}
+.shop-btn{font-family:var(--fh);font-size:13px;border:none;border-radius:16px;
+  padding:6px 16px;cursor:pointer;transition:opacity 0.15s;}
+.shop-btn.buy{background:var(--green-l);color:#fff;}
+.shop-btn.buy:hover{background:var(--green);}
+.shop-btn.equipped{background:#F5C06A;color:#fff;cursor:default;}
+.shop-btn.wear{background:var(--green-p);color:var(--green);border:1.5px solid var(--green-l);}
+.shop-btn.toggle-on{background:var(--green-l);color:#fff;}
+.shop-btn.toggle-off{background:var(--green-p);color:var(--green);border:1.5px solid var(--green-l);}
+.shop-btn.cant{background:#eee;color:#aaa;cursor:not-allowed;}
+
+/* ══ VOICE ══ */
+#api-screen{background:var(--cream);}
+.api-inner{flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:24px 16px;gap:12px;overflow-y:auto;}
+.api-title{font-family:var(--fh);font-size:20px;color:var(--text);}
+.api-desc{font-family:var(--fb);font-size:13px;color:var(--text-m);text-align:center;max-width:320px;}
+.api-label{font-family:var(--fb);font-size:13px;font-weight:700;color:var(--text-m);width:100%;max-width:340px;}
+.api-input{width:100%;max-width:340px;padding:12px 14px;border-radius:14px;
+  border:1.5px solid #ddd;background:#fff;font-family:var(--fb);font-size:14px;color:var(--text);}
+.api-input:focus{outline:none;border-color:var(--green-l);}
+.api-save-btn{font-family:var(--fh);font-size:15px;background:var(--green-l);
+  color:#fff;border:none;border-radius:24px;padding:11px 32px;cursor:pointer;}
+.api-status{font-family:var(--fb);font-size:12px;color:#4a6040;min-height:16px;
+  max-width:340px;text-align:center;font-weight:700;}
+.voice-list{width:100%;max-width:360px;max-height:220px;overflow-y:auto;}
+.voice-row{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-radius:10px;background:#fff;border:1.5px solid #eee;
+  cursor:pointer;margin-bottom:6px;transition:all 0.15s;}
+.voice-row:hover{border-color:var(--green-l);}
+.voice-row.selected{border-color:var(--green-l);background:#f0faf0;}
+.vname{font-family:var(--fb);font-size:13px;color:var(--text);font-weight:700;}
+.vcategory{font-family:var(--fb);font-size:11px;color:var(--text-s);}
+.prev-btn{font-family:var(--fb);font-size:11px;padding:4px 10px;border-radius:8px;
+  border:1.5px solid #ddd;background:transparent;color:var(--green);cursor:pointer;font-weight:700;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- ══ WELCOME ══ -->
+<div class="screen active" id="welcome-screen">
+  <div class="welcome-inner">
+    <img class="welcome-lumie" src="./img/lumie-hugs.png" alt="Lumie"/>
+    <div class="welcome-title">Lumie's Journey</div>
+    <div class="welcome-sub">Breathe in. Feel good. Shine on.</div>
+    <input class="welcome-input" id="username-input" type="text" maxlength="20"
+      placeholder="What shall Lumie call you?" autocomplete="off"/>
+    <button class="welcome-btn" onclick="startJourney()">Let's go! →</button>
+    <div id="profiles-row" class="profiles-row"></div>
+  </div>
+</div>
+
+<!-- ══ MAP ══ -->
+<div class="screen" id="map-screen">
+  <div class="top-bar">
+    <div class="top-left">
+      <img class="map-topbar-lumie" src="./img/lumie-main.png" alt="Lumie" onclick="showScreen('room-screen')" title="Lumie's Room"/>
+      <span class="top-title" style="font-size:38px;font-weight:800;line-height:1.1;font-family:'Baloo 2',cursive;">Lumie's Journey</span>
+    </div>
+    <div class="top-right">
+      <button class="icon-btn" onclick="switchUser()">👋 <span id="user-pill">...</span></button>
+      <button class="icon-btn" id="shop-nav-btn" onclick="showScreen('shop-screen')">🛍 Shop</button>
+      <button class="icon-btn" id="voice-btn" onclick="showScreen('api-screen')">🎙 Voice</button>
+      <div class="star-pill">⭐ <span class="star-display">0</span></div>
+    </div>
+  </div>
+  <div class="map-container">
+    <div class="map-canvas" id="map-canvas">
+      <svg class="map-bg-svg" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <rect width="800" height="520" fill="#FFF0DC"/>
+        <circle cx="700" cy="68" r="50" fill="#FFD97A" opacity="0.38"/>
+        <circle cx="700" cy="68" r="34" fill="#FFD060"/>
+        <g stroke="#FFD060" stroke-width="3" stroke-linecap="round" opacity="0.5">
+          <line x1="700" y1="18" x2="700" y2="8"/><line x1="734" y1="34" x2="742" y2="26"/>
+          <line x1="750" y1="68" x2="760" y2="68"/><line x1="666" y1="34" x2="658" y2="26"/>
+          <line x1="650" y1="68" x2="640" y2="68"/>
+        </g>
+        <!-- Cloud cluster left -->
+        <ellipse cx="105" cy="78" rx="52" ry="24" fill="#fff" opacity="0.88"/>
+        <ellipse cx="142" cy="68" rx="40" ry="20" fill="#fff" opacity="0.82"/>
+        <ellipse cx="70"  cy="84" rx="34" ry="18" fill="#fff" opacity="0.80"/>
+        <ellipse cx="120" cy="58" rx="28" ry="16" fill="#fff" opacity="0.75"/>
+        <!-- Cloud cluster centre-left -->
+        <ellipse cx="345" cy="52" rx="44" ry="20" fill="#fff" opacity="0.86"/>
+        <ellipse cx="382" cy="43" rx="32" ry="16" fill="#fff" opacity="0.80"/>
+        <ellipse cx="312" cy="57" rx="30" ry="15" fill="#fff" opacity="0.78"/>
+        <ellipse cx="358" cy="35" rx="22" ry="14" fill="#fff" opacity="0.72"/>
+        <!-- Cloud cluster centre-right -->
+        <ellipse cx="535" cy="92" rx="36" ry="17" fill="#fff" opacity="0.84"/>
+        <ellipse cx="566" cy="83" rx="26" ry="13" fill="#fff" opacity="0.78"/>
+        <ellipse cx="508" cy="97" rx="22" ry="13" fill="#fff" opacity="0.76"/>
+        <!-- Cloud cluster right (new) -->
+        <ellipse cx="680" cy="62" rx="46" ry="21" fill="#fff" opacity="0.82"/>
+        <ellipse cx="718" cy="52" rx="34" ry="17" fill="#fff" opacity="0.76"/>
+        <ellipse cx="648" cy="68" rx="28" ry="15" fill="#fff" opacity="0.74"/>
+        <ellipse cx="692" cy="42" rx="22" ry="13" fill="#fff" opacity="0.68"/>
+        <ellipse cx="80"  cy="368" rx="240" ry="88" fill="#C8E8A0"/>
+        <ellipse cx="380" cy="382" rx="280" ry="92" fill="#BEE298"/>
+        <ellipse cx="720" cy="366" rx="240" ry="86" fill="#C8E8A0"/>
+        <ellipse cx="0"   cy="400" rx="170" ry="64" fill="#A8D880"/>
+        <ellipse cx="230" cy="408" rx="210" ry="66" fill="#9ED074"/>
+        <ellipse cx="510" cy="400" rx="230" ry="68" fill="#A8D878"/>
+        <ellipse cx="800" cy="404" rx="170" ry="64" fill="#9ED074"/>
+        <rect x="0" y="408" width="800" height="112" fill="#8EC860"/>
+        <path d="M0 416 Q100 396 200 410 Q300 424 430 406 Q540 390 640 408 Q720 422 800 404 L800 520 L0 520Z" fill="#7EBC50"/>
+        <path d="M0 438 Q150 423 300 436 Q450 449 600 432 Q700 420 800 433 L800 520 L0 520Z" fill="#6EB048" opacity="0.5"/>
+        <path d="M55 478 Q155 443 275 458 Q375 473 458 436 Q542 400 642 418 Q712 432 778 398"
+              stroke="#F5C06A" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <path d="M55 478 Q155 443 275 458 Q375 473 458 436 Q542 400 642 418 Q712 432 778 398"
+              stroke="#FFF8E8" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="12 9" opacity="0.8"/>
+        <!-- Full rainbow spanning sky, endpoints hidden behind hills -->
+        <path d="M -40,400 Q 400,20 840,400" stroke="#F47A7A" stroke-width="9" fill="none" opacity="0.28" stroke-linecap="round"/>
+        <path d="M -30,412 Q 400,38 830,412" stroke="#F4A040" stroke-width="8" fill="none" opacity="0.26" stroke-linecap="round"/>
+        <path d="M -20,424 Q 400,54 820,424" stroke="#F4D070" stroke-width="8" fill="none" opacity="0.26" stroke-linecap="round"/>
+        <path d="M -10,434 Q 400,70 810,434" stroke="#A8D870" stroke-width="8" fill="none" opacity="0.24" stroke-linecap="round"/>
+        <path d="M 0,444 Q 400,86 800,444" stroke="#7BA8D4" stroke-width="8" fill="none" opacity="0.22" stroke-linecap="round"/>
+        <path d="M 10,452 Q 400,100 790,452" stroke="#A070D4" stroke-width="7" fill="none" opacity="0.18" stroke-linecap="round"/>
+        <ellipse cx="422" cy="308" rx="10" ry="6" fill="#F4A8D0" opacity="0.78" transform="rotate(-20 422 308)"/>
+        <ellipse cx="434" cy="310" rx="8"  ry="5" fill="#F4C8D8" opacity="0.72" transform="rotate(20 434 310)"/>
+        <line x1="427" y1="308" x2="429" y2="312" stroke="#C87870" stroke-width="1" opacity="0.5"/>
+        <text x="220" y="388" font-size="13" fill="#F5C06A" opacity="0.65" text-anchor="middle">✦</text>
+        <text x="452" y="373" font-size="10" fill="#C87BC4" opacity="0.55" text-anchor="middle">✦</text>
+        <text x="682" y="383" font-size="11" fill="#7BA8D4" opacity="0.55" text-anchor="middle">✦</text>
+      </svg>
+      
+      
+      <svg class="map-path-svg" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;">
+        <path d="M160,310 L191,303 L206,270 L242,271 L258,239 L294,240 L309,207 L340,200" stroke="rgba(255,255,255,0.75)" stroke-width="3.5" stroke-dasharray="10,8" stroke-linecap="round" fill="none"/>
+        <path d="M340,200 L375,197 L400,167 L439,173 L463,143 L502,149 L530,128" stroke="rgba(255,255,255,0.75)" stroke-width="3.5" stroke-dasharray="10,8" stroke-linecap="round" fill="none"/>
+        <path d="M530,128 L547,154 L583,156 L594,189 L629,191 L641,225 L670,235" stroke="rgba(255,255,255,0.75)" stroke-width="3.5" stroke-dasharray="10,8" stroke-linecap="round" fill="none"/>
+        <path d="M670,235 L634,248 L616,285 L574,289 L556,327 L514,331 L490,360" stroke="rgba(255,255,255,0.75)" stroke-width="3.5" stroke-dasharray="10,8" stroke-linecap="round" fill="none"/>
+      </svg>
+      <div class="map-lumie-block" id="map-lumie-block">
+        <img class="map-lumie-marker" id="map-lumie-marker" src="./img/lumie-main.png" alt="Lumie"/>
+        <div class="map-lumie-label" id="map-lumie-label">Lumie is here!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STAGES ══ -->
+<div class="screen" id="stages-screen">
+  <div class="top-bar">
+    <div class="top-left">
+      <button class="back-btn" onclick="showScreen('map-screen')">← Map</button>
+      <span class="top-title" id="stages-title"></span>
+    </div>
+    <div class="star-pill">⭐ <span class="star-display">0</span></div>
+  </div>
+  <div class="stages-banner" id="stages-banner"></div>
+  <div class="stages-scroll"><div class="stages-grid" id="stages-grid"></div></div>
+</div>
+
+<!-- ══ PLAYER ══ -->
+<div class="screen" id="player-screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="backFromPlayer()">← Back</button>
+    <div class="star-pill">⭐ <span class="star-display">0</span></div>
+  </div>
+  <div class="player-inner">
+    <div id="pl-idle" style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+      <img class="player-lumie" id="pl-lumie-img" src="./img/lumie-main.png" alt="Lumie"/>
+      <div class="player-area-tag" id="pl-area-tag"></div>
+      <div class="player-stage-name" id="pl-stage-name"></div>
+      <div class="player-hint" id="pl-hint"></div>
+      <button class="play-btn" onclick="playStart()">▶ Play</button>
+      <div class="voice-note" id="pl-voice-note"></div>
+    </div>
+    <div id="pl-playing" style="display:none;flex-direction:column;align-items:center;gap:16px;">
+      <div class="player-area-tag" id="pl-playing-tag"></div>
+      <div class="player-stage-name" id="pl-playing-name"></div>
+      <div class="playing-line" id="pl-line">Getting ready...</div>
+      <div class="prog-wrap"><div class="prog-fill" id="pl-progress" style="width:0%"></div></div>
+      <button class="stop-btn" onclick="stopPlay()">■ Stop</button>
+    </div>
+    <div id="pl-done" style="display:none;flex-direction:column;align-items:center;gap:14px;">
+      <img class="completion-lumie" src="./img/lumie-hugs.png" alt="Lumie celebrating"/>
+      <div class="star-earned" id="pl-stars-earned"></div>
+      <div class="done-msg">You did it! 🎉</div>
+      <div class="done-sub" id="pl-done-sub"></div>
+      <button class="next-btn" onclick="showScreen('stages-screen')">← Back to stages</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ROOM ══ -->
+<div class="screen" id="room-screen" style="position:relative;">
+  <div class="top-bar" style="position:relative;z-index:2;">
+    <div class="top-left">
+      <button class="back-btn" onclick="showScreen('map-screen')">← Map</button>
+      <span class="top-title">Lumie's Room</span>
+    </div>
+    <button class="icon-btn" id="shop-nav-btn" onclick="showScreen('shop-screen')">🛍 Shop</button>
+    <div class="star-pill" style="margin-left:8px;">⭐ <span class="star-display">0</span></div>
+  </div>
+  <svg class="room-bg-svg" viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="800" height="520" fill="#FEF0E4"/>
+    <rect x="0" y="345" width="800" height="7" fill="#ECC8A0" opacity="0.55"/>
+    <rect x="0" y="352" width="800" height="168" fill="#DEB880"/>
+    <line x1="0" y1="374" x2="800" y2="374" stroke="#C9A86C" stroke-width="1" opacity="0.42"/>
+    <line x1="0" y1="396" x2="800" y2="396" stroke="#C9A86C" stroke-width="1" opacity="0.42"/>
+    <line x1="0" y1="418" x2="800" y2="418" stroke="#C9A86C" stroke-width="1" opacity="0.35"/>
+    <line x1="0" y1="440" x2="800" y2="440" stroke="#C9A86C" stroke-width="1" opacity="0.32"/>
+    <line x1="160" y1="352" x2="160" y2="520" stroke="#C9A86C" stroke-width="0.7" opacity="0.26"/>
+    <line x1="340" y1="352" x2="340" y2="520" stroke="#C9A86C" stroke-width="0.7" opacity="0.26"/>
+    <line x1="520" y1="352" x2="520" y2="520" stroke="#C9A86C" stroke-width="0.7" opacity="0.26"/>
+    <line x1="690" y1="352" x2="690" y2="520" stroke="#C9A86C" stroke-width="0.7" opacity="0.26"/>
+    <!-- Window left -->
+    <rect x="35" y="40" width="145" height="168" fill="#C8E8F8" rx="6"/>
+    <rect x="30" y="34" width="155" height="178" fill="none" stroke="#E8C890" stroke-width="8" rx="8"/>
+    <line x1="107" y1="40" x2="107" y2="208" stroke="#E8C890" stroke-width="4.5"/>
+    <line x1="35" y1="114" x2="180" y2="114" stroke="#E8C890" stroke-width="4.5"/>
+    <rect x="35" y="40" width="145" height="168" fill="#D8F0F8" rx="4" opacity="0.42"/>
+    <ellipse cx="75"  cy="148" rx="30" ry="42" fill="#A8D878" opacity="0.85"/>
+    <ellipse cx="62"  cy="142" rx="20" ry="29" fill="#8EC860" opacity="0.62"/>
+    <rect x="71" y="183" width="9" height="25" fill="#C8A070" rx="2"/>
+    <ellipse cx="142" cy="156" rx="24" ry="34" fill="#B8E088" opacity="0.75"/>
+    <rect x="138" y="184" width="8" height="22" fill="#C8A070" rx="2"/>
+    <ellipse cx="60" cy="56" rx="26" ry="11" fill="#fff" opacity="0.52"/>
+    <ellipse cx="148" cy="62" rx="20" ry="9" fill="#fff" opacity="0.48"/>
+    <path d="M30 34 Q20 100 32 190 L50 190 Q28 108 44 34Z" fill="#F4A8C0" opacity="0.9"/>
+    <path d="M185 34 Q195 100 183 190 L165 190 Q187 108 171 34Z" fill="#F4A8C0" opacity="0.9"/>
+    <rect x="18" y="28" width="180" height="10" fill="#E890A8" rx="5"/>
+    <!-- Bookshelf -->
+    <rect x="248" y="80" width="195" height="270" fill="#E8C890" rx="4"/>
+    <rect x="243" y="74" width="205" height="12" fill="#D4A870" rx="3"/>
+    <rect x="243" y="342" width="205" height="12" fill="#D4A870" rx="3"/>
+    <rect x="248" y="148" width="195" height="7" fill="#D4A870"/>
+    <rect x="248" y="214" width="195" height="7" fill="#D4A870"/>
+    <rect x="248" y="280" width="195" height="7" fill="#D4A870"/>
+    <rect x="256" y="88" width="15" height="60" fill="#F47A7A" rx="2"/>
+    <rect x="273" y="94" width="13" height="54" fill="#74B8F4" rx="2"/>
+    <rect x="288" y="88" width="17" height="60" fill="#A8D870" rx="2"/>
+    <rect x="307" y="92" width="12" height="56" fill="#F4D070" rx="2"/>
+    <rect x="321" y="88" width="15" height="60" fill="#C4A0F4" rx="2"/>
+    <rect x="338" y="94" width="13" height="54" fill="#F4A870" rx="2"/>
+    <rect x="353" y="88" width="16" height="60" fill="#70D4C8" rx="2"/>
+    <rect x="371" y="92" width="14" height="56" fill="#F47AB4" rx="2"/>
+    <rect x="387" y="88" width="13" height="60" fill="#F4E070" rx="2"/>
+    <rect x="402" y="94" width="14" height="54" fill="#7AC8F4" rx="2"/>
+    <rect x="418" y="88" width="16" height="60" fill="#F47A7A" rx="2"/>
+    <rect x="256" y="157" width="14" height="57" fill="#A8D870" rx="2"/>
+    <rect x="272" y="162" width="12" height="52" fill="#F4D070" rx="2"/>
+    <rect x="286" y="157" width="16" height="57" fill="#F47AB4" rx="2"/>
+    <rect x="304" y="160" width="13" height="54" fill="#74B8F4" rx="2"/>
+    <rect x="319" y="157" width="15" height="57" fill="#F4A870" rx="2"/>
+    <circle cx="360" cy="194" r="14" fill="#F4C890"/>
+    <circle cx="350" cy="185" r="9" fill="#F4C890"/>
+    <circle cx="370" cy="185" r="9" fill="#F4C890"/>
+    <circle cx="360" cy="190" r="10" fill="#F8D8A8"/>
+    <circle cx="356" cy="188" r="2" fill="#8B5E3C"/>
+    <circle cx="364" cy="188" r="2" fill="#8B5E3C"/>
+    <path d="M355 195 Q360 199 365 195" stroke="#8B5E3C" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <rect x="379" y="157" width="14" height="57" fill="#C4A0F4" rx="2"/>
+    <rect x="395" y="162" width="15" height="52" fill="#F47A7A" rx="2"/>
+    <rect x="412" y="157" width="12" height="57" fill="#70D4C8" rx="2"/>
+    <rect x="426" y="160" width="14" height="54" fill="#F4E070" rx="2"/>
+    <rect x="256" y="222" width="34" height="28" fill="#F4C090" rx="3"/>
+    <text x="273" y="241" font-size="9" fill="#F4A040" text-anchor="middle">★</text>
+    <circle cx="315" cy="232" r="13" fill="#F4A8C0"/>
+    <circle cx="310" cy="227" r="2" fill="#C87890" opacity="0.7"/>
+    <circle cx="320" cy="227" r="2" fill="#C87890" opacity="0.7"/>
+    <path d="M311 234 Q315 238 319 234" stroke="#C87890" stroke-width="1.2" fill="none"/>
+    <circle cx="358" cy="238" r="15" fill="#88C8F4"/>
+    <ellipse cx="358" cy="238" rx="15" ry="6" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.52"/>
+    <line x1="358" y1="223" x2="358" y2="253" stroke="#fff" stroke-width="1.2" opacity="0.52"/>
+    <rect x="352" y="252" width="12" height="5" fill="#D4A870" rx="1"/>
+    <ellipse cx="403" cy="226" rx="13" ry="9" fill="#78C060"/>
+    <ellipse cx="394" cy="231" rx="9" ry="7" fill="#5CAA48"/>
+    <ellipse cx="411" cy="229" rx="8" ry="6" fill="#68B850"/>
+    <rect x="396" y="234" width="14" height="14" fill="#E89060" rx="2"/>
+    <rect x="256" y="288" width="25" height="22" fill="#7BA8D4" rx="3"/>
+    <rect x="284" y="290" width="18" height="20" fill="#F4D890" rx="2"/>
+    <text x="293" y="305" font-size="10" fill="#E8A040" text-anchor="middle">♪</text>
+    <circle cx="328" cy="297" r="10" fill="#C4A0F4"/>
+    <circle cx="323" cy="293" r="6" fill="#C4A0F4"/>
+    <circle cx="333" cy="293" r="6" fill="#C4A0F4"/>
+    <circle cx="328" cy="293" r="6" fill="#E0D0F8"/>
+    <rect x="346" y="288" width="12" height="22" fill="#F4A8C0" rx="5"/>
+    <rect x="350" y="283" width="4" height="9" fill="#E890A8" rx="2"/>
+    <circle cx="390" cy="295" r="10" fill="#F4E070"/>
+    <circle cx="384" cy="290" r="6" fill="#F4E870"/>
+    <circle cx="396" cy="290" r="6" fill="#F4E870"/>
+    <text x="390" y="300" font-size="9" fill="#C8A010" text-anchor="middle">★</text>
+    <circle cx="420" cy="295" r="8" fill="#F4A870"/>
+    <text x="420" y="300" font-size="9" fill="#fff" text-anchor="middle">♡</text>
+    <!-- Rug - centred in clear zone for Lumie -->
+    <ellipse cx="560" cy="440" rx="90" ry="14" fill="#F4C0D8" opacity="0.62"/>
+    <ellipse cx="560" cy="440" rx="68" ry="10" fill="#F090B8" opacity="0.42"/>
+    <!-- Fairy lights -->
+    <path d="M0 22 Q100 36 200 20 Q300 6 400 22 Q500 36 600 20 Q700 6 800 22"
+          stroke="#D4A850" stroke-width="1.5" fill="none" opacity="0.62"/>
+    <circle cx="36"  cy="26" r="4.5" fill="#FFE870" opacity="0.9"/>
+    <circle cx="90"  cy="34" r="4"   fill="#F4A8D0" opacity="0.9"/>
+    <circle cx="148" cy="26" r="4.5" fill="#A8D8F4" opacity="0.9"/>
+    <circle cx="204" cy="19" r="4"   fill="#C8A8F4" opacity="0.9"/>
+    <circle cx="260" cy="12" r="4.5" fill="#FFE870" opacity="0.9"/>
+    <circle cx="318" cy="20" r="4"   fill="#F4A8D0" opacity="0.9"/>
+    <circle cx="376" cy="28" r="4.5" fill="#A8F4C8" opacity="0.9"/>
+    <circle cx="434" cy="20" r="4"   fill="#FFE870" opacity="0.9"/>
+    <circle cx="492" cy="12" r="4.5" fill="#F4A8D0" opacity="0.9"/>
+    <circle cx="550" cy="20" r="4"   fill="#A8D8F4" opacity="0.9"/>
+    <circle cx="608" cy="28" r="4.5" fill="#C8A8F4" opacity="0.9"/>
+    <circle cx="666" cy="18" r="4"   fill="#FFE870" opacity="0.9"/>
+    <circle cx="724" cy="12" r="4.5" fill="#F4A8D0" opacity="0.9"/>
+    <circle cx="778" cy="20" r="4"   fill="#A8F4C8" opacity="0.9"/>
+    <!-- Side table + lamp (right) -->
+    <rect x="614" y="270" width="90" height="88" fill="#E8C080" rx="4"/>
+    <rect x="608" y="264" width="102" height="12" fill="#D4A860" rx="3"/>
+    <rect x="648" y="165" width="15" height="110" fill="#D4A860" rx="3"/>
+    <path d="M630 165 Q655 144 680 165Z" fill="#F4D890"/>
+    <path d="M630 165 L680 165" stroke="#E8C070" stroke-width="2.5"/>
+    <ellipse cx="655" cy="170" rx="34" ry="16" fill="#FFF8C0" opacity="0.28"/>
+    <rect x="624" y="244" width="24" height="22" fill="#F4A8A8" rx="4"/>
+    <path d="M648 249 Q658 249 658 255 Q658 261 648 261" stroke="#F08080" stroke-width="2.5" fill="none"/>
+    <rect x="629" y="242" width="14" height="5" fill="#F08080" rx="2"/>
+    <ellipse cx="680" cy="254" rx="10" ry="13" fill="#78C870"/>
+    <ellipse cx="671" cy="260" rx="8" ry="10" fill="#60B058"/>
+    <rect x="673" y="264" width="14" height="9" fill="#E8A060" rx="2"/>
+    <!-- Sun face artwork -->
+    <circle cx="558" cy="130" r="44" fill="#F8E8D0" stroke="#E8C090" stroke-width="6"/>
+    <circle cx="558" cy="130" r="36" fill="#FDF4E8"/>
+    <circle cx="558" cy="130" r="22" fill="#FFD860"/>
+    <circle cx="551" cy="125" r="3" fill="#C8960C"/>
+    <circle cx="565" cy="125" r="3" fill="#C8960C"/>
+    <path d="M552 134 Q558 140 564 134" stroke="#C8960C" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <line x1="558" y1="104" x2="558" y2="96" stroke="#FFD860" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="579" y1="111" x2="585" y2="105" stroke="#FFD860" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="586" y1="130" x2="594" y2="130" stroke="#FFD860" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="537" y1="111" x2="531" y2="105" stroke="#FFD860" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="530" y1="130" x2="522" y2="130" stroke="#FFD860" stroke-width="3.5" stroke-linecap="round"/>
+    <!-- Star bunting -->
+    <path d="M218 38 Q268 52 318 38" stroke="#F4C050" stroke-width="1.2" fill="none" opacity="0.62"/>
+    <text x="234" y="47" font-size="12" fill="#F4C050" text-anchor="middle" opacity="0.82">★</text>
+    <text x="266" y="54" font-size="12" fill="#F4A8D0" text-anchor="middle" opacity="0.82">★</text>
+    <text x="300" y="45" font-size="12" fill="#A8D8F4" text-anchor="middle" opacity="0.82">★</text>
+    <!-- Clear glow spot for Lumie (right of centre, away from bookshelf) -->
+    <ellipse cx="560" cy="390" rx="85" ry="28" fill="#FFF8F0" opacity="0.32"/>
+  </svg>
+  <div class="room-empty" id="room-empty">Visit the shop to get items for Lumie!</div>
+  <div class="room-content">
+    <div class="room-stage" id="room-stage">
+      <img class="room-lumie-img" id="room-lumie-img" src="./img/lumie-main.png" alt="Lumie"/>
+    </div>
+    <div class="room-outfit-label" id="outfit-label"></div>
+    <div class="room-items" id="room-items"></div>
+  </div>
+</div>
+
+<!-- ══ SHOP ══ -->
+<div class="screen" id="shop-screen">
+  <div class="top-bar">
+    <div class="top-left">
+      <button class="back-btn" onclick="showScreen('map-screen')">← Map</button>
+      <span class="top-title">Lumie's Shop</span>
+    </div>
+    <div class="star-pill">⭐ <span class="star-display">0</span></div>
+  </div>
+  <div class="shop-header" onclick="showScreen('room-screen')" title="Visit Lumie's Room">
+    <img class="shop-header-lumie" src="./img/lumie-hugs.png" alt="Lumie"/>
+    <div>
+      <div class="shop-header-text">Lumie's Shop</div>
+      <div style="font-family:var(--fb);font-size:11px;color:var(--text-s);">Tap Lumie to visit her room →</div>
+    </div>
+  </div>
+  <div class="shop-tabs">
+    <button class="shop-tab active" onclick="switchTab('outfits',this)">👗 Outfits</button>
+    <button class="shop-tab" onclick="switchTab('companions',this)">🐾 Companions</button>
+    <button class="shop-tab" onclick="switchTab('toys',this)">🎁 Toys</button>
+  </div>
+  <div class="shop-scroll"><div class="shop-grid" id="shop-grid"></div></div>
+</div>
+
+<!-- ══ VOICE ══ -->
+<div class="screen" id="api-screen">
+  <div class="top-bar">
+    <div class="top-left">
+      <button class="back-btn" onclick="showScreen('map-screen')">← Map</button>
+      <span class="top-title">Voice Settings</span>
+    </div>
+  </div>
+  <div class="api-inner">
+    <img src="./img/lumie-main.png" style="width:90px;height:90px;object-fit:contain;" alt="Lumie"/>
+    <div class="api-title">Give Lumie a voice</div>
+    <div class="api-desc">Enter your ElevenLabs API key to hear Lumie read guided activities aloud.</div>
+    <div class="api-label">ElevenLabs API Key</div>
+    <input type="password" class="api-input" id="api-key-input" placeholder="xi_..."/>
+    <button class="api-save-btn" onclick="saveKey()">Load voices</button>
+    <div class="api-status" id="api-status"></div>
+    <div class="voice-list" id="voice-list"></div>
+    <button class="api-save-btn" id="voice-confirm-btn" style="display:none;" onclick="confirmVoice()">Use this voice ✓</button>
+  </div>
+</div>
+
+<script>
+const SPRITES = {
+  main:        './img/lumie-main.png',
+  hugs:        './img/lumie-hugs.png',
+  meditating:  './img/lumie-meditating.png',
+  gratitude:   './img/lumie-gratitude.png',
+  journal:     './img/lumie-journal.png'
+};
+const OUTFIT_IMGS = {
+  lumiemain:          './img/lumie-main.png',
+  lumiekimono:        './img/lumie-kimono.png',
+  lumieeveningdress:  './img/lumie-eveningdress.png',
+  lumiesports:        './img/lumie-sports.png',
+};
+
+const AREAS   = [{"id": "grove", "name": "Glimmer Grove", "color": "#72D46E", "border": "#2E8A2B", "unlock": 0, "emoji": "\ud83c\udf3f", "img": "./img/glimmergrove.png", "x": 160, "y": 310}, {"id": "caves", "name": "Crystal Caves", "color": "#18B8D8", "border": "#1A5FBC", "unlock": 10, "emoji": "\ud83d\udc8e", "img": "./img/crystalcaves.png", "x": 340, "y": 200}, {"id": "sky", "name": "Sky Islands", "color": "#E8C96A", "border": "#6A2EC0", "unlock": 22, "emoji": "\u2601\ufe0f", "img": "./img/skyisland.png", "x": 530, "y": 128}, {"id": "ember", "name": "Ember Volcano", "color": "#F06030", "border": "#C03000", "unlock": 38, "emoji": "\ud83c\udf0b", "img": "./img/embervolcano.png", "x": 670, "y": 235}, {"id": "moon", "name": "Moonlit Ocean", "color": "#4A8FE8", "border": "#0080A8", "unlock": 58, "emoji": "\ud83c\udf0a", "img": "./img/moonlitocean.png", "x": 490, "y": 360}];
+const STAGES  = {"grove": [{"id": "grove_breathing", "name": "Forest Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "Welcome to Glimmer Grove. Find somewhere comfortable and settle in.", "p": 1.5}, {"t": "Place your hands gently on your tummy.", "p": 1.5}, {"t": "We're going to breathe together, nice and slow.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "grove_meditation", "name": "The Golden Pool", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "Close your eyes and imagine you're sitting in Glimmer Grove.", "p": 2.5}, {"t": "Tiny golden lights float between the leaves around you.", "p": 6}, {"t": "Feel the soft grass beneath you.", "p": 6}, {"t": "A gentle breeze carries the scent of flowers.", "p": 7}, {"t": "You are safe here. Completely safe.", "p": 7}, {"t": "Watch the lights drift slowly around you.", "p": 8}, {"t": "One floats close. It's warm and soft.", "p": 7}, {"t": "With every breath, you feel more peaceful.", "p": 7}, {"t": "There's nothing you need to do right now. Just be here.", "p": 8}, {"t": "Stay as long as you like.", "p": 10}, {"t": "When you're ready, gently open your eyes.", "p": 3}]}, {"id": "grove_gratitude", "name": "Counting Fireflies", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about something that made you smile today.", "p": 1}, {"t": "Really let it fill your heart.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about someone who has been kind to you.", "p": 1}, {"t": "Picture their face.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about something about yourself you're really proud of.", "p": 1}, {"t": "You deserve to celebrate this.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "grove_journal", "name": "Lumie's First Page", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "What is one thing that made today interesting?", "p": 1}, {"t": "Take your time. Write as much or as little as you like.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "If you could go anywhere right now, where would it be — and why?", "p": 1}, {"t": "Let your imagination run free.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}], "caves": [{"id": "caves_breathing", "name": "Deep Cave Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "Welcome back to Crystal Caves. Let the cool blue light settle around you.", "p": 1.5}, {"t": "Sit tall and close your eyes if you'd like.", "p": 1.5}, {"t": "Today we'll try box breathing — in, hold, out, hold.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Breathe in through your nose...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Hold gently...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 1.2}, {"t": "Breathe out slowly...", "p": 0.5}, {"t": "One.", "p": 0.8}, {"t": "Two.", "p": 0.8}, {"t": "Three.", "p": 0.8}, {"t": "Four.", "p": 0.8}, {"t": "Five.", "p": 0.8}, {"t": "Six.", "p": 1.5}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "caves_meditation", "name": "The Still Lake", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "Imagine you're deep inside a crystal cave.", "p": 2.5}, {"t": "Soft blue light reflects off the walls around you.", "p": 6}, {"t": "The crystals hum very gently.", "p": 6}, {"t": "Everything sparkles and glows.", "p": 7}, {"t": "You feel curious and calm at the same time.", "p": 7}, {"t": "There is nothing to worry about in here.", "p": 8}, {"t": "Just peace, and cool quiet air.", "p": 8}, {"t": "Breathe in the stillness.", "p": 8}, {"t": "You belong here.", "p": 8}, {"t": "Rest here a little longer.", "p": 10}, {"t": "When you're ready, gently return.", "p": 3}]}, {"id": "caves_gratitude", "name": "Hidden Gems", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about a place that makes you feel safe.", "p": 1}, {"t": "Picture every detail of it.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about a time you helped someone else.", "p": 1}, {"t": "How did it feel?", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about something small that brought you joy this week.", "p": 1}, {"t": "Even the tiniest thing counts.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "caves_journal", "name": "What the Crystals Know", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "Describe a moment this week when you felt really good.", "p": 1}, {"t": "Try to remember exactly how it felt.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "What's something you'd like to get better at?", "p": 1}, {"t": "Be kind to yourself as you write.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}], "sky": [{"id": "sky_breathing", "name": "Cloud Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "High above the clouds in Sky Islands. The air is light and fresh up here.", "p": 1.5}, {"t": "Let's breathe together.", "p": 1.5}, {"t": "Breathe in slowly...", "p": 4}, {"t": "Hold...", "p": 2.5}, {"t": "Breathe out...", "p": 6}, {"t": "Pause...", "p": 2.5}, {"t": "Breathe in slowly...", "p": 4}, {"t": "Hold...", "p": 2.5}, {"t": "Breathe out...", "p": 6}, {"t": "Pause...", "p": 2.5}, {"t": "Breathe in slowly...", "p": 4}, {"t": "Hold...", "p": 2.5}, {"t": "Breathe out...", "p": 6}, {"t": "Pause...", "p": 2.5}, {"t": "Breathe in slowly...", "p": 4}, {"t": "Hold...", "p": 2.5}, {"t": "Breathe out...", "p": 6}, {"t": "Pause...", "p": 2.5}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "sky_meditation", "name": "Drifting Above", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "You're floating gently on a soft cloud above the Sky Islands.", "p": 2.5}, {"t": "The air is warm and light.", "p": 6}, {"t": "Far below, colourful islands drift peacefully.", "p": 7}, {"t": "You feel weightless.", "p": 7}, {"t": "Nothing can reach you up here.", "p": 8}, {"t": "Just open sky, and the hum of the wind.", "p": 8}, {"t": "You can let everything go for a moment.", "p": 8}, {"t": "You are exactly where you need to be.", "p": 10}, {"t": "Gently open your eyes when you're ready.", "p": 3}]}, {"id": "sky_gratitude", "name": "Island Gifts", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about something in nature you find beautiful.", "p": 1}, {"t": "Let it fill your whole mind.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about a memory that makes you feel warm inside.", "p": 1}, {"t": "Stay with it.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about a challenge you faced and got through.", "p": 1}, {"t": "That took real strength.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "sky_journal", "name": "Writing on the Wind", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "Write about someone who inspires you.", "p": 1}, {"t": "What is it about them that you admire?", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "What does your perfect day look like?", "p": 1}, {"t": "Describe every part of it.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}], "ember": [{"id": "ember_breathing", "name": "Ember Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "The warmth of Ember Volcano wraps around you. Strong and calm.", "p": 1.5}, {"t": "Settle in. Let's breathe.", "p": 1.5}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "ember_meditation", "name": "The Lava Fields", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "You stand at the edge of Ember Volcano, looking out over a glowing landscape.", "p": 2.5}, {"t": "The warmth wraps around you like a cosy blanket.", "p": 6}, {"t": "You feel strong. And peaceful.", "p": 7}, {"t": "Deep beneath the earth, powerful things rest quietly.", "p": 7}, {"t": "You can be powerful and still at the same time.", "p": 8}, {"t": "Breathe in strength.", "p": 8}, {"t": "Breathe out anything heavy.", "p": 7}, {"t": "You are bigger than your worries.", "p": 8}, {"t": "Rest here a moment longer.", "p": 10}, {"t": "Gently open your eyes when you're ready.", "p": 3}]}, {"id": "ember_gratitude", "name": "Warm Harvest", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about someone you love, and why you love them.", "p": 1}, {"t": "Let that feeling grow.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about something your body can do that you're grateful for.", "p": 1}, {"t": "We often forget to say thank you to ourselves.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about a moment today when you felt strong.", "p": 1}, {"t": "Even a small one counts.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "ember_journal", "name": "The Volcano's Secret", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "Describe a time you were brave.", "p": 1}, {"t": "You might surprise yourself.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "What's a worry you could let go of today?", "p": 1}, {"t": "Write it down, then imagine releasing it.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}], "moon": [{"id": "moon_breathing", "name": "Tide Breath", "type": "breathing", "hint": "Calm your body with guided breathing.", "sprite": "meditating", "stars": 3, "script": [{"t": "The moonlit ocean stretches out. Let its rhythm guide you.", "p": 1.5}, {"t": "No counting tonight. Just follow your own breath.", "p": 1.5}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Breathe in.", "p": 4}, {"t": "Hold.", "p": 2.5}, {"t": "Out.", "p": 6}, {"t": "Rest.", "p": 3}, {"t": "Well done. Notice how calm your body feels.", "p": 4}, {"t": "Carry this stillness with you.", "p": 2}]}, {"id": "moon_meditation", "name": "Silver Water", "type": "meditation", "hint": "A peaceful guided visualisation.", "sprite": "meditating", "stars": 4, "script": [{"t": "Find a comfortable position and gently close your eyes.", "p": 2.5}, {"t": "You're sitting on a moonlit beach, watching the ocean breathe.", "p": 2.5}, {"t": "Silver light reflects on the water.", "p": 6}, {"t": "The waves are steady and gentle.", "p": 7}, {"t": "You have nowhere to be and nothing to do.", "p": 8}, {"t": "Just this moment. Just this breath.", "p": 8}, {"t": "The moon watches over you.", "p": 7}, {"t": "The earth holds you.", "p": 7}, {"t": "You are enough. Exactly as you are.", "p": 10}, {"t": "Come back gently, in your own time.", "p": 3}]}, {"id": "moon_gratitude", "name": "Moon Wishes", "type": "gratitude", "hint": "Discover what you're thankful for.", "sprite": "gratitude", "stars": 3, "script": [{"t": "Gratitude is a superpower. Let's practise it together.", "p": 1.5}, {"t": "Think about each question. There's no right answer — just yours.", "p": 2}, {"t": "Think about a dream or hope you're holding.", "p": 1}, {"t": "Let yourself believe in it.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about something you learned recently.", "p": 1}, {"t": "Learning is a gift.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Think about three things you're thankful for right now — let them come naturally.", "p": 1}, {"t": "Take your time with each one.", "p": 15}, {"t": "Lovely.", "p": 1.5}, {"t": "Gratitude lives in small things. You just found some of them.", "p": 2}, {"t": "Well done.", "p": 1.5}]}, {"id": "moon_journal", "name": "The Last Page", "type": "journal", "hint": "Explore your thoughts on paper.", "sprite": "journal", "stars": 3, "script": [{"t": "Time to write. Grab your journal, or just think the words.", "p": 1.5}, {"t": "Write freely. No one will judge what you put down.", "p": 2}, {"t": "Write about something you're really looking forward to.", "p": 1}, {"t": "Let yourself feel excited.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "If Lumie could talk, what do you think she'd say to you right now?", "p": 1}, {"t": "Let her be kind.", "p": 35}, {"t": "Wonderful.", "p": 1.5}, {"t": "Every word you write helps you understand yourself a little better.", "p": 2}, {"t": "That's something to be really proud of.", "p": 1.5}]}]};
+const SHOP    = {"outfits": [{"id": "lumiemain", "name": "Default outfit", "cost": 0, "img": "lumiemain"}, {"id": "lumiekimono", "name": "Cherry kimono", "cost": 18, "img": "lumiekimono"}, {"id": "lumieeveningdress", "name": "Silver gown", "cost": 22, "img": "lumieeveningdress"}, {"id": "lumiesports", "name": "Sports hoodie", "cost": 15, "img": "lumiesports"}], "companions": [{"id": "c_cat", "name": "Moon cat", "emoji": "\ud83d\udc31", "cost": 12}, {"id": "c_bunny", "name": "Mini bunny", "emoji": "\ud83d\udc07", "cost": 12}, {"id": "c_dragon", "name": "Baby dragon", "emoji": "\ud83d\udc09", "cost": 18}, {"id": "c_turtle", "name": "Wise turtle", "emoji": "\ud83d\udc22", "cost": 15}, {"id": "c_bird", "name": "Songbird", "emoji": "\ud83d\udc26", "cost": 10}, {"id": "c_fox", "name": "Starfox", "emoji": "\ud83e\udd8a", "cost": 14}], "toys": [{"id": "t_balloon", "name": "Moon balloon", "emoji": "\ud83c\udf88", "cost": 4}, {"id": "t_wand", "name": "Magic wand", "emoji": "\ud83e\ude84", "cost": 7}, {"id": "t_rainbow", "name": "Rainbow", "emoji": "\ud83c\udf08", "cost": 5}, {"id": "t_lantern", "name": "Glow lantern", "emoji": "\ud83c\udfee", "cost": 6}, {"id": "t_star", "name": "Lucky star", "emoji": "\u2b50", "cost": 4}, {"id": "t_music", "name": "Music box", "emoji": "\ud83c\udfb5", "cost": 8}]};
+
+const TYPE_SPRITE = {breathing:'hugs',meditation:'meditating',gratitude:'gratitude',journal:'journal'};
+const TYPE_COLOR  = {
+  breathing:  {bg:'#E0F0FF',color:'#1a6a9a'},
+  meditation: {bg:'#EDE0FF',color:'#5a2a9a'},
+  gratitude:  {bg:'#FFE0F0',color:'#9a2a6a'},
+  journal:    {bg:'#E0FFE8',color:'#1a7a4a'},
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const USERS_KEY = 'lumie_users_v2';
+const STATE_KEY = u => 'lumie_state_v2_' + u.toLowerCase().trim();
+let currentUser = null;
+let state = {};
+
+function defaultState() {
+  return {stars:0,stagesDone:{},owned:{'lumiemain':true},equipped:{outfit:'lumiemain'},apiKey:null,voiceId:null,voiceName:null};
+}
+function loadUsers() { try { return JSON.parse(localStorage.getItem(USERS_KEY)||'[]'); } catch{return[];} }
+function saveUsers(u) { localStorage.setItem(USERS_KEY,JSON.stringify(u)); }
+function loadState(u) { try { const s=localStorage.getItem(STATE_KEY(u)); return s?Object.assign(defaultState(),JSON.parse(s)):defaultState(); } catch{return defaultState();} }
+function saveState() { if(currentUser) localStorage.setItem(STATE_KEY(currentUser),JSON.stringify(state)); }
+
+// ── WELCOME ───────────────────────────────────────────────────────────────────
+function initWelcome() {
+  const users = loadUsers();
+  const row = document.getElementById('profiles-row');
+  row.innerHTML = '';
+  if (users.length > 0) {
+    const lbl = document.createElement('div');
+    lbl.className = 'profiles-label';
+    lbl.textContent = "Who's exploring today?";
+    row.appendChild(lbl);
+    users.forEach(u => {
+      const chip = document.createElement('div');
+      chip.className = 'profile-chip';
+      chip.innerHTML = u + '<span class="delete-x" title="Remove">\u00d7</span>';
+      chip.onclick = () => { document.getElementById('username-input').value = u; startJourney(); };
+      chip.querySelector('.delete-x').onclick = (e) => {
+        e.stopPropagation();
+        const allUsers = loadUsers().filter(n => n !== u);
+        saveUsers(allUsers);
+        initWelcome();
+      };
+      row.appendChild(chip);
+    });
+  }
+}
+
+function startJourney() {
+  const name = document.getElementById('username-input').value.trim();
+  if (!name) { toast('Tell Lumie your name first! 🌟'); return; }
+  currentUser = name;
+  state = loadState(name);
+  const users = loadUsers();
+  if (!users.includes(name)) { users.push(name); saveUsers(users); }
+  document.getElementById('user-pill').textContent = name;
+  if (state.voiceId) {
+    document.getElementById('voice-btn').textContent = '🎙 ' + (state.voiceName ? state.voiceName.replace(/\s*[-\u2013\u2014]+.*$/, '').trim() : state.voiceName);
+    document.getElementById('voice-btn').classList.add('connected');
+  }
+  showScreen('map-screen');
+}
+
+function switchUser() {
+  saveState();
+  currentUser = null;
+  document.getElementById('username-input').value = '';
+  initWelcome();
+  showScreen('welcome-screen');
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function updateAllStars() { document.querySelectorAll('.star-display').forEach(el=>el.textContent=state.stars); }
+let toastTimer;
+function toast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='map-screen') renderMap();
+  if(id==='shop-screen') renderShop('outfits');
+  if(id==='room-screen') renderRoom();
+  updateAllStars(); saveState();
+}
+function setPlayerPanel(name) {
+  ['idle','playing','done'].forEach(p=>{
+    document.getElementById('pl-'+p).style.display = name===p?'flex':'none';
+  });
+}
+
+// ── MAP ───────────────────────────────────────────────────────────────────────
+function getAreaState(area) {
+  const stages = STAGES[area.id]||[];
+  const done = stages.filter(s=>state.stagesDone[s.id]).length;
+  if(state.stars < area.unlock) return 'locked';
+  if(done===stages.length && stages.length>0) return 'completed';
+  if(done>0) return 'inprogress';
+  return 'notstarted';
+}
+
+function renderMap() {
+  const canvas = document.getElementById('map-canvas');
+  canvas.querySelectorAll('.map-node').forEach(n=>n.remove());
+  AREAS.forEach(area => {
+    const aState = getAreaState(area);
+    const node = document.createElement('div');
+    node.className = 'map-node ' + aState;
+    const cw = canvas.offsetWidth||800, ch = canvas.offsetHeight||520;
+    node.style.left = (area.x * cw/800) + 'px';
+    node.style.top  = (area.y * ch/520) + 'px';
+    const circle = document.createElement('div');
+    circle.className = 'map-node-circle';
+    circle.style.background = area.img ? 'transparent' : (aState==='locked'?'#bbb':area.color);
+    circle.style.borderColor = area.img ? (aState==='locked'?'rgba(0,0,0,0.15)':'rgba(255,255,255,0.6)') : (aState==='locked'?'#999':area.border);
+    circle.style.overflow = 'hidden';
+    circle.style.padding = area.img ? '0' : '';
+    circle.innerHTML = aState==='locked'
+      ? (area.img ? `<img src="${area.img}" style="width:100px;height:100px;object-fit:cover;border-radius:50%;opacity:0.4;filter:grayscale(0.85);">` : '<span style="font-size:22px;">🔒</span>')
+      : (area.img ? `<img src="${area.img}" style="width:108px;height:108px;object-fit:cover;border-radius:50%;">` : `<span style="font-size:26px;">${area.emoji}</span>`);  const label = document.createElement('div');
+    label.className = 'map-node-label';
+    label.textContent = area.name;
+    node.appendChild(circle); node.appendChild(label);
+    if(area.unlock > 0) {
+      const starsReq = document.createElement('div');
+      starsReq.style.cssText = 'font-family:var(--fh);font-size:11px;color:#B8860B;background:#FFF8DC;border:1.5px solid #F5C06A;border-radius:10px;padding:2px 8px;white-space:nowrap;margin-top:2px;';
+      starsReq.textContent = '\u2b50' + area.unlock + ' to unlock';
+      node.appendChild(starsReq);
+    }
+    if(aState!=='locked') node.onclick = ()=>openArea(area);
+    canvas.appendChild(node);
+  });
+  // Position Lumie marker
+  const block = document.getElementById('map-lumie-block');
+  let cur = AREAS[0];
+  for(let i=AREAS.length-1;i>=0;i--) { if(state.stars>=AREAS[i].unlock){cur=AREAS[i];break;} }
+  const cw=canvas.offsetWidth||800, ch=canvas.offsetHeight||520;
+  block.style.left = (cur.x*cw/800)+'px';
+  block.style.top  = (cur.y*ch/520 - 66)+'px';
+}
+window.addEventListener('resize',()=>{ if(document.getElementById('map-screen').classList.contains('active')) renderMap(); });
+
+// ── STAGES ────────────────────────────────────────────────────────────────────
+let currentArea=null, currentStage=null;
+
+function openArea(area) {
+  currentArea = area;
+  document.getElementById('stages-title').textContent = area.name;
+  const banner = document.getElementById('stages-banner');
+  banner.innerHTML = area.name;
+  banner.style.background = area.color;
+  const stagesScreen = document.getElementById('stages-screen');
+  stagesScreen.style.cssText = `background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url("${area.img}") center/cover no-repeat; background-color: ${area.color};`;
+  const grid = document.getElementById('stages-grid');
+  grid.innerHTML = '';
+  (STAGES[area.id]||[]).forEach(stage => {
+    const done = !!state.stagesDone[stage.id];
+    const sk = TYPE_SPRITE[stage.type]||'main';
+    const tc = TYPE_COLOR[stage.type]||{bg:'#eee',color:'#444'};
+    const card = document.createElement('div');
+    card.className = 'stage-card'+(done?' done':'');
+    card.innerHTML = `
+      <img class="stage-sprite" src="${SPRITES[sk]}" alt="Lumie"/>
+      <div class="stage-badge" style="background:${tc.bg};color:${tc.color};">${stage.type}</div>
+      <div class="stage-name">${stage.name}</div>
+      <div class="stage-hint">${stage.hint}</div>
+      <div class="stage-stars">+${stage.stars} ⭐ each play</div>`;
+    card.onclick = ()=>openStage(area,stage);
+    grid.appendChild(card);
+  });
+  showScreen('stages-screen');
+}
+
+// ── PLAYER ────────────────────────────────────────────────────────────────────
+let isPlaying=false, waitId=null, audioObj=null, lineIdx=0;
+
+function openStage(area,stage) {
+  currentArea=area; currentStage=stage;
+  const sk=TYPE_SPRITE[stage.type]||'main';
+  document.getElementById('pl-lumie-img').src=SPRITES[sk];
+  const tc=TYPE_COLOR[stage.type]||{bg:'#444',color:'#fff'};
+  const tag=document.getElementById('pl-area-tag');
+  tag.innerHTML=(area.img ? `<img src="${area.img}" style="width:18px;height:18px;border-radius:50%;object-fit:cover;margin-right:4px;vertical-align:middle;">` : area.emoji+' ') + area.name;
+  tag.style.background=area.color+'33'; tag.style.color=area.border;
+  const ptag=document.getElementById('pl-playing-tag');
+  ptag.innerHTML=(area.img ? `<img src="${area.img}" style="width:18px;height:18px;border-radius:50%;object-fit:cover;margin-right:4px;vertical-align:middle;">` : area.emoji+' ') + area.name;
+  ptag.style.background=area.color+'33'; ptag.style.color=area.border;
+  document.getElementById('pl-stage-name').textContent=stage.name;
+  document.getElementById('pl-playing-name').textContent=stage.name;
+  document.getElementById('pl-hint').textContent=stage.hint;
+  document.getElementById('pl-voice-note').textContent=state.voiceId
+    ?'🎙 Voice: '+state.voiceName
+    :'No voice set — text only. Set up in Voice Settings.';
+  setPlayerPanel('idle');
+  showScreen('player-screen');
+}
+
+function backFromPlayer() { stopPlay(); showScreen('stages-screen'); }
+
+function playStart() {
+  if(!currentStage) return;
+  isPlaying=true; lineIdx=0;
+  setPlayerPanel('playing');
+  runLine();
+}
+
+async function runLine() {
+  if(!isPlaying) return;
+  const script=currentStage.script;
+  if(lineIdx>=script.length) { playChime(); setTimeout(finishPlay,1200); return; }
+  const line=script[lineIdx];
+  const total=script.length;
+  document.getElementById('pl-progress').style.width=(lineIdx/total*100)+'%';
+  const el=document.getElementById('pl-line');
+  el.style.opacity='0'; el.textContent=line.t;
+  setTimeout(()=>el.style.opacity='1',60);
+  if(state.apiKey && state.voiceId) await speakLine(line.t);
+  if(!isPlaying) return;
+  await pause(line.p*1000);
+  if(!isPlaying) return;
+  lineIdx++; runLine();
+}
+
+function pause(ms) {
+  return new Promise(res=>{ waitId=setTimeout(res,ms); });
+}
+
+function stopPlay() {
+  isPlaying=false;
+  if(audioObj){audioObj.pause();audioObj=null;}
+  if(waitId){clearTimeout(waitId);waitId=null;}
+  setPlayerPanel('idle');
+}
+
+async function speakLine(text) {
+  try {
+    const res=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+state.voiceId,{
+      method:'POST',
+      headers:{'xi-api-key':state.apiKey,'Content-Type':'application/json'},
+      body:JSON.stringify({text,model_id:'eleven_turbo_v2_5',voice_settings:{stability:0.55,similarity_boost:0.75,style:0.05,use_speaker_boost:true}})
+    });
+    if(!res.ok) return;
+    const blob=await res.blob();
+    const url=URL.createObjectURL(blob);
+    await new Promise(res=>{
+      if(!isPlaying){res();return;}
+      audioObj=new Audio(url);
+      audioObj.onended=()=>{URL.revokeObjectURL(url);res();};
+      audioObj.onerror=res;
+      audioObj.play();
+    });
+  } catch(e){}
+}
+
+function playChime() {
+  try {
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    [528,1056,792].forEach((freq,i)=>{
+      const osc=ctx.createOscillator(), gain=ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value=freq; osc.type='sine';
+      const t=ctx.currentTime+i*0.08;
+      gain.gain.setValueAtTime(0,t);
+      gain.gain.linearRampToValueAtTime(0.18-i*0.04,t+0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001,t+3.5);
+      osc.start(t); osc.stop(t+3.5);
+    });
+  } catch(e){}
+}
+
+function finishPlay() {
+  if(!isPlaying && waitId===null) return;
+  isPlaying=false;
+  const stars=currentStage.stars;
+  state.stars+=stars;
+  state.stagesDone[currentStage.id]=true;
+  saveState(); updateAllStars();
+  document.getElementById('pl-progress').style.width='100%';
+  document.getElementById('pl-stars-earned').textContent='+'+stars+' ⭐';
+  document.getElementById('pl-done-sub').textContent='Brilliant work. Keep going!';
+  setPlayerPanel('done');
+  renderMap();
+}
+
+// ── ROOM ──────────────────────────────────────────────────────────────────────
+function renderRoom() {
+  const outfit = state.equipped.outfit || 'lumiemain';
+  document.getElementById('room-lumie-img').src = OUTFIT_IMGS[outfit]||SPRITES.main;
+  const outfitItem = SHOP.outfits.find(o=>o.id===outfit);
+  const lbl=document.getElementById('outfit-label');
+  lbl.textContent = (outfitItem && outfit!=='lumiemain') ? '👗 '+outfitItem.name : '';
+  const itemsDiv=document.getElementById('room-items');
+  const emptyDiv=document.getElementById('room-empty');
+  itemsDiv.innerHTML='';
+  let hasItems=false;
+  [...SHOP.companions,...SHOP.toys].forEach(item=>{
+    if(state.equipped[item.id]) {
+      hasItems=true;
+      const chip=document.createElement('div');
+      chip.className='room-item-chip active';
+      chip.innerHTML=`<span>${item.emoji}</span><span>${item.name}</span>`;
+      chip.title='Tap to remove';
+      chip.onclick=()=>{state.equipped[item.id]=false;saveState();renderRoom();};
+      itemsDiv.appendChild(chip);
+    } else if(state.owned[item.id]) {
+      const chip=document.createElement('div');
+      chip.className='room-item-chip';
+      chip.innerHTML=`<span>${item.emoji}</span><span style="color:#aaa;">${item.name}</span>`;
+      chip.title='Tap to display';
+      chip.onclick=()=>{state.equipped[item.id]=true;saveState();renderRoom();};
+      itemsDiv.appendChild(chip);
+    }
+  });
+  emptyDiv.style.display=(hasItems||Object.keys(state.owned).filter(k=>k!=='lumiemain'&&state.owned[k]).length>0)?'none':'block';
+}
+
+// ── SHOP ──────────────────────────────────────────────────────────────────────
+let currentTab='outfits';
+function switchTab(tab,btn) {
+  currentTab=tab;
+  document.querySelectorAll('.shop-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderShop(tab);
+}
+function renderShop(tab) {
+  currentTab=tab||currentTab;
+  const grid=document.getElementById('shop-grid');
+  grid.innerHTML='';
+  const items=SHOP[currentTab]||[];
+  items.forEach(item=>{
+    const owned=!!state.owned[item.id];
+    const isEquipped = currentTab==='outfits'
+      ? state.equipped.outfit===item.id
+      : !!state.equipped[item.id];
+    const canAfford=state.stars>=item.cost;
+    const card=document.createElement('div');
+    card.className='shop-card'+(owned?' owned':'')+(isEquipped?' equipped':'');
+    let thumb='';
+    if(currentTab==='outfits') {
+      thumb=`<img class="shop-outfit-img" src="${OUTFIT_IMGS[item.img]||SPRITES.main}" alt="${item.name}"/>`;
+    } else {
+      thumb=`<div class="shop-emoji">${item.emoji}</div>`;
+    }
+    let btnHtml='';
+    if(!owned) {
+      btnHtml=canAfford
+        ?`<button class="shop-btn buy" onclick="buyItem('${item.id}','${currentTab}')">Buy ⭐${item.cost}</button>`
+        :`<button class="shop-btn cant">⭐${item.cost}</button>`;
+    } else if(currentTab==='outfits') {
+      btnHtml=isEquipped
+        ?`<button class="shop-btn equipped">✓ Wearing</button>`
+        :`<button class="shop-btn wear" onclick="equipOutfit('${item.id}')">Wear</button>`;
+    } else {
+      btnHtml=isEquipped
+        ?`<button class="shop-btn toggle-on" onclick="toggleItem('${item.id}')">✓ Displayed</button>`
+        :`<button class="shop-btn toggle-off" onclick="toggleItem('${item.id}')">Display</button>`;
+    }
+    card.innerHTML=`
+      ${thumb}
+      <div class="shop-name">${item.name}</div>
+      ${owned?'':` <div class="shop-desc-cost">⭐ ${item.cost}</div>`}
+      ${btnHtml}`;
+    grid.appendChild(card);
+  });
+}
+
+function buyItem(id, tab) {
+  const items=[...SHOP.outfits,...SHOP.companions,...SHOP.toys];
+  const item=items.find(i=>i.id===id);
+  if(!item||state.owned[id]||state.stars<item.cost) return;
+  state.stars-=item.cost;
+  state.owned[id]=true;
+  if(tab==='outfits') state.equipped.outfit=id;
+  saveState(); updateAllStars();
+  toast('Got '+item.name+'! '+(item.emoji||'👗'));
+  renderShop(tab);
+}
+
+function equipOutfit(id) {
+  state.equipped.outfit=id;
+  saveState(); renderShop('outfits');
+}
+
+function toggleItem(id) {
+  state.equipped[id]=!state.equipped[id];
+  saveState(); renderShop(currentTab);
+}
+
+// ── VOICE ─────────────────────────────────────────────────────────────────────
+let selVoiceId=null, selVoiceName=null;
+
+function saveKey() {
+  const key=document.getElementById('api-key-input').value.trim();
+  if(!key) return;
+  state.apiKey=key; saveState(); loadVoices(key);
+}
+
+async function loadVoices(key) {
+  document.getElementById('api-status').textContent='Loading voices...';
+  try {
+    const res=await fetch('https://api.elevenlabs.io/v1/voices',{headers:{'xi-api-key':key}});
+    if(!res.ok) throw new Error('Invalid key');
+    const data=await res.json();
+    const voices=(data.voices||[]).slice(0,24);
+    document.getElementById('api-status').textContent=voices.length+' voices found. Tap to select.';
+    const list=document.getElementById('voice-list');
+    list.style.display='block'; list.innerHTML='';
+    voices.forEach(v=>{
+      const row=document.createElement('div');
+      row.className='voice-row'+(state.voiceId===v.voice_id?' selected':'');
+      row.innerHTML=`<div><div class="vname">${v.name}</div><div class="vcategory">${v.category||''}</div></div>
+        <button class="prev-btn" onclick="previewVoice('${v.voice_id}','${key}',event)">Preview</button>`;
+      row.onclick=(e)=>{
+        if(e.target.classList.contains('prev-btn')) return;
+        selVoiceId=v.voice_id; selVoiceName=v.name;
+        list.querySelectorAll('.voice-row').forEach(r=>r.classList.remove('selected'));
+        row.classList.add('selected');
+        document.getElementById('voice-confirm-btn').style.display='block';
+      };
+      list.appendChild(row);
+    });
+  } catch(e) { document.getElementById('api-status').textContent='Error: '+e.message; }
+}
+
+async function previewVoice(vid,key,e) {
+  e.stopPropagation();
+  document.getElementById('api-status').textContent='Playing preview...';
+  try {
+    const res=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+vid,{
+      method:'POST',
+      headers:{'xi-api-key':key,'Content-Type':'application/json'},
+      body:JSON.stringify({text:'I am Lumie. Are you ready to begin?',model_id:'eleven_turbo_v2_5',voice_settings:{stability:0.5,similarity_boost:0.75}})
+    });
+    if(!res.ok) return;
+    const blob=await res.blob();
+    const url=URL.createObjectURL(blob);
+    if(audioObj){audioObj.pause();}
+    audioObj=new Audio(url);
+    audioObj.play();
+    audioObj.onended=()=>{URL.revokeObjectURL(url);document.getElementById('api-status').textContent='Tap a voice to select it.';};
+  } catch(e) { document.getElementById('api-status').textContent='Preview error: '+e.message; }
+}
+
+function confirmVoice() {
+  if(!selVoiceId) return;
+  state.voiceId=selVoiceId; state.voiceName=selVoiceName; saveState();
+  document.getElementById('voice-btn').textContent='🎙 '+(selVoiceName.replace(/\s*[-\u2013\u2014]+.*$/, '').trim()||selVoiceName);
+  document.getElementById('voice-btn').classList.add('connected');
+  toast('Voice set to '+selVoiceName+'!');
+  showScreen('map-screen');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+initWelcome();
+</script>
+</body>
+</html>
